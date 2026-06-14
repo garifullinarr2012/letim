@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Island+Moments&family=Italianno&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Kapakana:wght@300..400&family=Karma:wght@300;400;500;600;700&family=Kurale&family=Lora:ital,wght@0,400..700;1,400..700&family=Oswald:wght@200..700&family=Pangolin&family=Pattaya&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playwrite+GB+J+Guides:ital@0;1&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Vidaloka&display=swap"
+        rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЛЕТИМ | Мои заказы</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7fa;
+            color: #1a2c3e;
+        }
+
+        .top-header {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding-left: 120px;
+        }
+
+        .help-link,
+        .city-button,
+        .account-button {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .help-link:hover,
+        .city-button:hover,
+        .account-button:hover {
+            background: rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .city-selector,
+        .account-menu {
+            position: relative;
+        }
+
+        .city-dropdown,
+        .account-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 0.5rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            min-width: 220px;
+            display: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .city-dropdown.show,
+        .account-dropdown.show {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .city-search {
+            padding: 0.8rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .city-search input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+        }
+
+        .city-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .city-item {
+            padding: 0.7rem 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .city-item:hover {
+            background: #f0f2f5;
+        }
+
+        .city-item.selected {
+            background: #eef2ff;
+            color: #0b3b5f;
+            font-weight: 600;
+        }
+
+        .dropdown-arrow {
+            font-size: 0.7rem;
+            transition: transform 0.3s;
+        }
+
+        .account-button.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .account-dropdown {
+            left: auto;
+            right: 0;
+            min-width: 260px;
+        }
+
+        .dropdown-header {
+            padding: 1rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .user-email {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 0.2rem;
+        }
+
+        .dropdown-menu-items {
+            padding: 0.5rem 0;
+        }
+
+        .dropdown-item {
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            color: #1e293b;
+            text-decoration: none;
+        }
+
+        .dropdown-item:hover {
+            background: #f1f5f9;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 0.5rem 0;
+        }
+
+        .logout-item {
+            color: #dc2626;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-header {
+            background: #42C0E8;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #000000;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 0;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #696969;
+            border-bottom-color: #23697e;
+        }
+
+        .cart-link,
+        .favorites-link {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-count,
+        .favorites-count {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background: #BCEFFF;
+            color: rgb(0, 0, 0);
+            font-size: 0.7rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 50%;
+        }
+
+        .main-container1 {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .orders-section {
+            background: white;
+            border-radius: 28px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .orders-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b3b5f;
+            margin-bottom: 2rem;
+            border-left: 5px solid #42C0E8;
+            padding-left: 1rem;
+        }
+
+        .order-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .order-card:hover {
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 1rem;
+        }
+
+        .order-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #42C0E8;
+        }
+
+        .order-date {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .order-status {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-confirmed {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .status-completed {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .status-cancelled {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .order-items {
+            margin-bottom: 1rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info {
+            flex: 2;
+        }
+
+        .item-name {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 1rem;
+        }
+
+        .item-type {
+            font-size: 0.7rem;
+            color: #42C0E8;
+            margin-left: 0.5rem;
+        }
+
+        .item-details {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 0.2rem;
+        }
+
+        .item-price {
+            font-weight: 700;
+            color: #2c7a4d;
+            font-size: 1.1rem;
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #e2e8f0;
+            margin-top: 0.5rem;
+        }
+
+        .order-total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2c7a4d;
+        }
+
+        .order-total-label {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-right: 0.5rem;
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .repeat-order-btn,
+        .download-ticket-btn {
+            background: #42C0E8;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .download-ticket-btn {
+            background: #10b981;
+        }
+
+        .repeat-order-btn:hover {
+            background: #2aa8d0;
+            transform: translateY(-1px);
+        }
+
+        .download-ticket-btn:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .empty-orders {
+            text-align: center;
+            padding: 4rem;
+        }
+
+        .empty-orders p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-continue {
+            background: #42C0E8;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-continue:hover {
+            background: #2aa8d0;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 3rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+            justify-content: space-between;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: rgb(0, 0, 0);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: #42C0E8;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.6rem;
+            font-size: 0.85rem;
+        }
+
+        .footer-column ul li a {
+            color: #000000;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-column ul li a:hover {
+            color: #42C0E8;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #e2e8f0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            font-size: 0.8rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .top-header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            .logo {
+                padding-left: 0;
+                justify-content: center;
+            }
+            .user-actions {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .nav-header {
+                padding: 0.8rem 1rem;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container1 {
+                padding: 1rem;
+            }
+            .orders-section {
+                padding: 1rem;
+            }
+            .orders-title {
+                font-size: 1.5rem;
+            }
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .order-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            .order-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .order-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .repeat-order-btn,
+            .download-ticket-btn {
+                flex: 1;
+                text-align: center;
+            }
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-column h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .city-button,
+            .help-link,
+            .account-button {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.75rem;
+            }
+            .nav-links a {
+                font-size: 0.75rem;
+            }
+            .order-number {
+                font-size: 1rem;
+            }
+            .item-name {
+                font-size: 0.9rem;
+            }
+            .order-total {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="top-header">
+        <div class="logo" onclick="window.location.href='/'">
+            <div class="
+        .footer-bottom {
+            border-top: 1px solid #e2e8f0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            font-size: 0.8rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }">
+                <img src="/image/logo.png" alt="ЛЕТИМ" onerror="this.src='https://via.placeholder.com/50x50?text=ЛЕТИМ'">
+            </div>
+        </div>
+        <div class="user-actions">
+            <div class="city-selector" id="citySelector">
+                <div class="city-button" id="cityButton">
+                    <span id="selectedCityText">Москва</span>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="city-dropdown" id="cityDropdown">
+                    <div class="city-search">
+                        <input type="text" id="citySearch" placeholder="Поиск города...">
+                    </div>
+                    <div class="city-list" id="cityList"></div>
+                </div>
+            </div>
+
+            <div class="help-button">
+                <a href="help.html" class="help-link">
+                    <span>Помощь</span>
+                </a>
+            </div>
+
+            <div class="account-menu" id="accountMenu">
+                <div class="account-button" id="accountButton">
+                    <span class="account-name" id="accountName">Войти</span>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="account-dropdown" id="accountDropdown">
+                    <div class="dropdown-header">
+                        <div><strong id="userNameDisplay">Гость</strong></div>
+                        <div class="user-email" id="userEmailDisplay">Войдите в аккаунт</div>
+                    </div>
+                    <div class="dropdown-menu-items">
+                        <a href="auth.html" class="dropdown-item" id="loginLink">Войти</a>
+                        <a href="auth.html" class="dropdown-item" id="registerLink">Зарегистрироваться</a>
+                        <div class="dropdown-divider" id="divider1"></div>
+                         
+                        <a href="zak.html" class="dropdown-item">Мои заказы</a>
+                        <a href="set.html" class="dropdown-item">Настройки</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="admin.html" class="dropdown-item" id="adminLink" style="display: none;">Админ-панель</a>
+                        <div class="dropdown-divider" id="divider2"></div>
+                        <a href="#" class="dropdown-item logout-item" id="logoutLink" style="display: none;">Выход</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav-header">
+        <div class="nav-links">
+            <a href="index.html">Поиск туров</a>
+            <a href="index1.html">Поиск отелей</a>
+            <a href="tour.html">Туры</a>
+            <a href="about.html">О нас</a>
+            <a href="favorites.html">
+                Избранное
+            </a>
+            <a href="korz.html" class="cart-link">
+                Корзина
+                <span class="cart-count" id="cartCount">0</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="main-container1">
+        <div class="orders-section">
+            <h1 class="orders-title">Мои заказы</h1>
+            <div id="ordersContent"></div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="/image/logo.png" alt="ЛЕТИМ" style="height: 50px;" onerror="this.style.display='none'">
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>О компании</h3>
+                    <ul>
+                        <li><a href="about.html">О нас</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Туристам</h3>
+                    <ul>
+                        <li><a href="index.html">Поиск туров</a></li>
+                        <li><a href="index1.html">Поиск отелей</a></li>
+                        <li><a href="tour.html">Горящие туры</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul>
+                        <li>8987-8987-00-2</li>
+                        <li>LETIM.OREN@MAIL.RU</li>
+                        <li>г. Оренбург, ул. Чкалова, д. 2</li>
+                        <li>Пн-Пт: 11:00-20:00</li>
+                        <li>Сб: 10:00-15:00</li>
+                        <li>Вс: выходной</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+          <div class="footer-social">
+                <a href="#"><img src="https://maxicons.ru/icons/Max_logo_black.svg" alt="MAX" width="24"></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ==================== КОНФИГУРАЦИЯ ====================
+        const API_URL = 'http://localhost:3003/api';
+        
+        // ==================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====================
+        let currentUser = null;
+        let orders = [];
+
+        // ==================== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ====================
+        function showNotification(message, isError = false) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${isError ? '#dc2626' : '#10b981'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                z-index: 10000;
+                animation: fadeIn 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            `;
+            notification.innerText = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': 'В обработке',
+                'confirmed': 'Подтвержден',
+                'completed': 'Выполнен',
+                'cancelled': 'Отменен'
+            };
+            return statusMap[status] || status;
+        }
+
+        function getStatusClass(status) {
+            const classMap = {
+                'pending': 'status-pending',
+                'confirmed': 'status-confirmed',
+                'completed': 'status-completed',
+                'cancelled': 'status-cancelled'
+            };
+            return classMap[status] || 'status-pending';
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ru-RU', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // ==================== РАБОТА С СЕРВЕРОМ ====================
+        async function fetchCurrentUser() {
+            try {
+                const response = await fetch(`${API_URL}/auth/me`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.user) {
+                        currentUser = data.user;
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        console.log('✅ Пользователь авторизован:', currentUser.name);
+                    } else {
+                        currentUser = null;
+                        localStorage.removeItem('currentUser');
+                    }
+                } else {
+                    currentUser = null;
+                    localStorage.removeItem('currentUser');
+                }
+            } catch (error) {
+                console.error('❌ Ошибка получения пользователя:', error);
+                currentUser = null;
+            }
+            updateUserUI();
+            return currentUser;
+        }
+
+        function loadOrdersFromLocalStorage() {
+            const savedOrders = localStorage.getItem('orders');
+            console.log('📦 Загрузка заказов из localStorage');
+            
+            if (savedOrders) {
+                const allOrders = JSON.parse(savedOrders);
+                if (currentUser) {
+                    orders = allOrders.filter(order => order.userEmail === currentUser.email);
+                    console.log(`✅ Загружено заказов для пользователя ${currentUser.email}: ${orders.length}`);
+                } else {
+                    orders = [];
+                }
+            } else {
+                orders = [];
+                console.log('📦 Заказов не найдено в localStorage');
+            }
+            renderOrders();
+        }
+
+        async function fetchFavoritesCount() {
+            if (!currentUser) return 0;
+            
+            try {
+                const response = await fetch(`${API_URL}/favorites`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    let favorites = [];
+                    if (Array.isArray(data) && data.length > 0) {
+                        if (data[0] && data[0].tour_data) {
+                            favorites = data.map(item => item.tour_data).filter(tour => tour !== null);
+                        } else {
+                            favorites = data;
+                        }
+                    }
+                    document.getElementById('favoritesCount').innerText = favorites.length;
+                    return favorites.length;
+                }
+            } catch (error) {
+                console.error('Ошибка получения избранного:', error);
+                const favorites = JSON.parse(localStorage.getItem('favorites_tours')) || [];
+                document.getElementById('favoritesCount').innerText = favorites.length;
+            }
+            return 0;
+        }
+
+        async function fetchCartCount() {
+            if (!currentUser) return 0;
+            
+            try {
+                const response = await fetch(`${API_URL}/cart`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    const cart = await response.json();
+                    document.getElementById('cartCount').innerText = cart.length;
+                    return cart.length;
+                }
+            } catch (error) {
+                console.error('Ошибка получения корзины:', error);
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                document.getElementById('cartCount').innerText = cart.length;
+            }
+            return 0;
+        }
+
+        async function logout() {
+            try {
+                await fetch(`${API_URL}/auth/logout`, { method: 'POST', credentials: 'include' });
+            } catch (error) {
+                console.error('Ошибка при выходе:', error);
+            }
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            updateUserUI();
+            showNotification('Вы вышли из аккаунта');
+            setTimeout(() => window.location.reload(), 1000);
+        }
+
+        function updateCartCountDisplay() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartCountElements = document.querySelectorAll('.cart-count');
+            cartCountElements.forEach(el => {
+                el.innerText = cart.length;
+            });
+        }
+
+        function updateUserUI() {
+            const accountName = document.getElementById('accountName');
+            const userNameDisplay = document.getElementById('userNameDisplay');
+            const userEmailDisplay = document.getElementById('userEmailDisplay');
+            const loginLink = document.getElementById('loginLink');
+            const registerLink = document.getElementById('registerLink');
+            const divider1 = document.getElementById('divider1');
+            const logoutLink = document.getElementById('logoutLink');
+            const adminLink = document.getElementById('adminLink');
+            const divider2 = document.getElementById('divider2');
+            
+            if (currentUser) {
+                const displayName = currentUser.name.split(' ')[0] || currentUser.name;
+                if (accountName) accountName.innerText = displayName;
+                if (userNameDisplay) userNameDisplay.innerText = currentUser.name;
+                if (userEmailDisplay) userEmailDisplay.innerText = currentUser.email;
+                if (loginLink) loginLink.style.display = 'none';
+                if (registerLink) registerLink.style.display = 'none';
+                if (divider1) divider1.style.display = 'none';
+                if (logoutLink) logoutLink.style.display = 'flex';
+                
+                if (currentUser.role === 'admin' && adminLink) {
+                    adminLink.style.display = 'flex';
+                    if (divider2) divider2.style.display = 'block';
+                } else if (adminLink) {
+                    adminLink.style.display = 'none';
+                    if (divider2) divider2.style.display = 'none';
+                }
+                
+                console.log(`👤 Отображаем пользователя: ${currentUser.name}`);
+            } else {
+                if (accountName) accountName.innerText = 'Войти';
+                if (userNameDisplay) userNameDisplay.innerText = 'Гость';
+                if (userEmailDisplay) userEmailDisplay.innerText = 'Войдите в аккаунт';
+                if (loginLink) loginLink.style.display = 'flex';
+                if (registerLink) registerLink.style.display = 'flex';
+                if (divider1) divider1.style.display = 'block';
+                if (logoutLink) logoutLink.style.display = 'none';
+                if (adminLink) adminLink.style.display = 'none';
+                if (divider2) divider2.style.display = 'none';
+            }
+        }
+
+        function downloadTicket(order) {
+            const ticketDiv = document.createElement('div');
+            ticketDiv.style.cssText = `
+                padding: 30px;
+                background: white;
+                font-family: 'Inter', sans-serif;
+                max-width: 800px;
+                margin: 0 auto;
+                border-radius: 20px;
+            `;
+            
+            const itemsHtml = (order.items || []).map(item => `
+                <div style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #e2e8f0;">
+                    <div>
+                        <strong>${escapeHtml(item.name)}</strong>
+                        <span style="color: #42C0E8; font-size: 12px; margin-left: 8px;">${item.type === 'tour' ? 'Тур' : 'Отель'}</span>
+                        <div style="font-size: 12px; color: #64748b; margin-top: 4px;">${item.details || 'Стандартный тариф'}</div>
+                    </div>
+                    <div style="font-weight: 700; color: #2c7a4d;">${Number(item.price).toLocaleString()} ₽</div>
+                </div>
+            `).join('');
+            
+            ticketDiv.innerHTML = `
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <div style="font-size: 36px; font-weight: 800; background: linear-gradient(135deg, #1a7f9e, #3aa8cf); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">✈️ ЛЕТИМ</div>
+                    <div style="font-size: 12px; color: #64748b; margin-top: 5px;">Электронный билет</div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #cfe9ff, #b0d4ff); border-radius: 16px; padding: 20px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px;">
+                        <div>
+                            <div style="font-size: 11px; color: #4b6f8e; text-transform: uppercase;">Номер заказа</div>
+                            <div style="font-size: 18px; font-weight: 700; color: #0b3b5f;">${order.orderNumber}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 11px; color: #4b6f8e; text-transform: uppercase;">Дата оформления</div>
+                            <div style="font-size: 14px; font-weight: 500;">${formatDate(order.date)}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 11px; color: #4b6f8e; text-transform: uppercase;">Статус</div>
+                            <div style="font-size: 14px; font-weight: 600; color: #059669;">${getStatusText(order.status)}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 14px; font-weight: 600; color: #0b3b5f; margin-bottom: 10px;">Информация о пассажире</div>
+                    <div style="background: #f8fafc; border-radius: 12px; padding: 15px;">
+                        <div><strong>${escapeHtml(currentUser?.name || 'Не указан')}</strong></div>
+                        <div style="font-size: 13px; color: #64748b; margin-top: 4px;">${currentUser?.email || ''}</div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 14px; font-weight: 600; color: #0b3b5f; margin-bottom: 10px;">Состав заказа</div>
+                    <div style="background: #f8fafc; border-radius: 12px; padding: 15px;">
+                        ${itemsHtml || '<div>Нет товаров</div>'}
+                    </div>
+                </div>
+                
+                <div style="background: #f0fdf4; border-radius: 12px; padding: 15px; text-align: right; border: 1px solid #d1fae5;">
+                    <div style="font-size: 14px; color: #2c7a4d;">Итого к оплате</div>
+                    <div style="font-size: 24px; font-weight: 800; color: #059669;">${Number(order.totalAmount).toLocaleString()} ₽</div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px dashed #cbd5e1;">
+                    <div style="font-size: 11px; color: #94a3b8;">Счастливого пути! ✈️</div>
+                    <div style="font-size: 10px; color: #94a3b8; margin-top: 5px;">Данный документ является подтверждением бронирования</div>
+                </div>
+            `;
+            
+            document.body.appendChild(ticketDiv);
+            
+            const opt = {
+                margin: [0.5, 0.5, 0.5, 0.5],
+                filename: `Билет_ЛЕТИМ_${order.orderNumber}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, letterRendering: true },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+            
+            html2pdf().set(opt).from(ticketDiv).save().then(() => {
+                document.body.removeChild(ticketDiv);
+                showNotification(`✅ Билет №${order.orderNumber} успешно скачан!`);
+            }).catch(err => {
+                document.body.removeChild(ticketDiv);
+                showNotification('❌ Ошибка при создании билета', true);
+                console.error(err);
+            });
+        }
+
+        function repeatOrder(orderNumber) {
+            const order = orders.find(o => o.orderNumber === orderNumber);
+            if (order && order.items) {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                order.items.forEach(item => {
+                    cart.push({
+                        id: Date.now() + Math.random(),
+                        name: item.name,
+                        price: item.price,
+                        type: item.type,
+                        details: item.details
+                    });
+                });
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCountDisplay();
+                showNotification('✅ Товары добавлены в корзину');
+                setTimeout(() => {
+                    window.location.href = 'korz.html';
+                }, 1000);
+            } else {
+                showNotification('❌ Не удалось повторить заказ', true);
+            }
+        }
+
+        function renderOrders() {
+            const container = document.getElementById('ordersContent');
+            
+            if (!currentUser) {
+                container.innerHTML = `
+                    <div class="empty-orders">
+                        <p>🔒 Для просмотра заказов необходимо войти в аккаунт</p>
+                        <a href="auth.html" class="btn-continue">Войти в аккаунт</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            if (!orders || orders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-orders">
+                        <p>📦 У вас пока нет заказов</p>
+                        <a href="index.html" class="btn-continue">Перейти к покупкам</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            orders.forEach(order => {
+                html += `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div>
+                                <span class="order-number">Заказ №${order.orderNumber || 'Неизвестный'}</span>
+                            </div>
+                            <div>
+                                <span class="order-date">${formatDate(order.date || new Date())}</span>
+                                <span class="order-status ${getStatusClass(order.status)}">${getStatusText(order.status)}</span>
+                            </div>
+                        </div>
+                        <div class="order-items">
+                `;
+                
+                const items = order.items || [];
+                items.forEach(item => {
+                    const typeLabel = item.type === 'tour' ? 'Тур' : 'Отель';
+                    html += `
+                        <div class="order-item">
+                            <div class="item-info">
+                                <div>
+                                    <span class="item-name">${escapeHtml(item.name)}</span>
+                                    <span class="item-type">${typeLabel}</span>
+                                </div>
+                                <div class="item-details">
+                                    ${item.details || 'Стандартный тариф'}
+                                    ${item.dates ? ` | ${item.dates}` : ''}
+                                </div>
+                            </div>
+                            <div class="item-price">${Number(item.price).toLocaleString()} ₽</div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                        <div class="order-footer">
+                            <div>
+                                <span class="order-total-label">Итого:</span>
+                                <span class="order-total">${Number(order.totalAmount || 0).toLocaleString()} ₽</span>
+                            </div>
+                            <div class="order-actions">
+                                <button class="download-ticket-btn" data-order='${JSON.stringify(order).replace(/'/g, "&#39;")}'>🎫 Скачать билет</button>
+                                <button class="repeat-order-btn" data-order='${JSON.stringify(order).replace(/'/g, "&#39;")}'>🔄 Повторить заказ</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            
+            document.querySelectorAll('.download-ticket-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const orderData = this.getAttribute('data-order');
+                    if (orderData) {
+                        const order = JSON.parse(orderData);
+                        downloadTicket(order);
+                    } else {
+                        showNotification('Ошибка: данные заказа не найдены', true);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.repeat-order-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const orderData = this.getAttribute('data-order');
+                    if (orderData) {
+                        const order = JSON.parse(orderData);
+                        repeatOrder(order.orderNumber);
+                    } else {
+                        showNotification('Ошибка: данные заказа не найдены', true);
+                    }
+                });
+            });
+        }
+
+        // ==================== ФУНКЦИИ ГОРОДА ====================
+        const cities = ["Москва", "Санкт-Петербург", "Екатеринбург", "Казань", "Новосибирск", "Сочи", "Краснодар", "Ростов-на-Дону", "Самара", "Уфа", "Челябинск", "Владивосток", "Калининград", "Оренбург", "Тюмень", "Нижний Новгород", "Волгоград"];
+
+        let selectedCity = localStorage.getItem('selectedCity') || "Москва";
+
+        function renderCityList(filterText = '') {
+            const cityListContainer = document.getElementById('cityList');
+            const filteredCities = cities.filter(city => city.toLowerCase().includes(filterText.toLowerCase()));
+            cityListContainer.innerHTML = filteredCities.map(city => `
+                <div class="city-item ${city === selectedCity ? 'selected' : ''}" data-city="${city}">
+                    <span>${city}</span>${city === selectedCity ? '<span style="margin-left: auto;">✓</span>' : ''}
+                </div>
+            `).join('');
+            document.querySelectorAll('.city-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const city = item.getAttribute('data-city');
+                    if (city) selectCity(city);
+                });
+            });
+        }
+
+        function selectCity(city) {
+            selectedCity = city;
+            localStorage.setItem('selectedCity', city);
+            document.getElementById('selectedCityText').innerText = city;
+            renderCityList(document.getElementById('citySearch').value);
+            document.getElementById('cityDropdown').classList.remove('show');
+        }
+
+        function initCitySelector() {
+            const selectedCityText = document.getElementById('selectedCityText');
+            if (selectedCityText) selectedCityText.innerText = selectedCity;
+            renderCityList('');
+            
+            const cityButton = document.getElementById('cityButton');
+            const cityDropdown = document.getElementById('cityDropdown');
+            const citySearch = document.getElementById('citySearch');
+            
+            if (cityButton && cityDropdown) {
+                cityButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    cityDropdown.classList.toggle('show');
+                    if (cityDropdown.classList.contains('show') && citySearch) {
+                        renderCityList('');
+                        citySearch.focus();
+                    }
+                });
+            }
+            if (citySearch) {
+                citySearch.addEventListener('input', (e) => renderCityList(e.target.value));
+            }
+            document.addEventListener('click', (e) => {
+                const citySelector = document.getElementById('citySelector');
+                if (citySelector && !citySelector.contains(e.target) && cityDropdown) {
+                    cityDropdown.classList.remove('show');
+                }
+            });
+        }
+
+        function initAccountMenu() {
+            const accountButton = document.getElementById('accountButton');
+            const accountDropdown = document.getElementById('accountDropdown');
+            if (accountButton && accountDropdown) {
+                accountButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    accountDropdown.classList.toggle('show');
+                });
+                const logoutLink = document.getElementById('logoutLink');
+                if (logoutLink) {
+                    logoutLink.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        await logout();
+                    });
+                }
+                document.addEventListener('click', (e) => {
+                    const accountMenu = document.getElementById('accountMenu');
+                    if (accountMenu && !accountMenu.contains(e.target) && accountDropdown) {
+                        accountDropdown.classList.remove('show');
+                    }
+                });
+            }
+        }
+
+        // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+        async function init() {
+            console.log('🚀 Инициализация страницы моих заказов...');
+            console.log('📡 API URL:', API_URL);
+            
+            initCitySelector();
+            initAccountMenu();
+            
+            await fetchCurrentUser();
+            
+            if (currentUser) {
+                loadOrdersFromLocalStorage();
+            }
+            
+            await fetchFavoritesCount();
+            await fetchCartCount();
+            
+            updateCartCountDisplay();
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

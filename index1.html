@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Летим - поиск отелей</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&family=Roboto:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ============================================ */
+        /* ОСНОВНЫЕ СТИЛИ */
+        /* ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #1a2c3e;
+        }
+
+        /* ============================================ */
+        /* ШАПКА (HEADER) */
+        /* ============================================ */
+        .top-header {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding-left: 120px;
+        }
+
+
+        .footer-bottom {
+            border-top: 1px solid #e2e8f0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            font-size: 0.8rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 2rem;
+            letter-spacing: 1px;
+        }
+
+
+        .footer-bottom {
+            border-top: 1px solid #e2e8f0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            font-size: 0.8rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .help-link,
+        .city-button,
+        .account-button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #42C0E8;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .help-link:hover,
+        .city-button:hover,
+        .account-button:hover {
+            background: #aaebff;
+            transform: translateY(-2px);
+        }
+
+        .city-selector,
+        .account-menu {
+            position: relative;
+        }
+
+        .city-dropdown,
+        .account-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 0.5rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            min-width: 220px;
+            display: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .city-dropdown.show,
+        .account-dropdown.show {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .city-search {
+            padding: 0.8rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .city-search input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+        }
+
+        .city-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .city-item {
+            padding: 0.7rem 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .city-item:hover {
+            background: #f0f2f5;
+        }
+
+        .city-item.selected {
+            background: #eef2ff;
+            color: #0b3b5f;
+            font-weight: 600;
+        }
+
+        .dropdown-arrow {
+            font-size: 0.7rem;
+            color: #42C0E8;
+            transition: transform 0.3s;
+        }
+
+        .account-button.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .account-dropdown {
+            left: auto;
+            right: 0;
+            min-width: 260px;
+        }
+
+        .dropdown-header {
+            padding: 1rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .user-email {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 0.2rem;
+        }
+
+        .dropdown-menu-items {
+            padding: 0.5rem 0;
+        }
+
+        .dropdown-item {
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            color: #1e293b;
+            text-decoration: none;
+        }
+
+        .dropdown-item:hover {
+            background: #f1f5f9;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 0.5rem 0;
+        }
+
+        .logout-item {
+            color: #dc2626;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* ============================================ */
+        /* НАВИГАЦИЯ */
+        /* ============================================ */
+        .nav-header {
+            background: #42C0E8;
+            padding: 0.8rem 6rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #000000;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 0;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #696969;
+            border-bottom-color: #23697e;
+        }
+
+        .cart-link,
+        .favorites-link {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-count,
+        .favorites-count {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background: #BCEFFF;
+            color: rgb(0, 0, 0);
+            font-size: 0.7rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 50%;
+        }
+
+        /* ============================================ */
+        /* ПОИСК ОТЕЛЕЙ */
+        /* ============================================ */
+        .hotel-search-section {
+            background: #42C0E8;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.1);
+            padding-left: 100px;
+            padding-right: 100px;
+            padding-bottom: 20px;
+            padding-top: 50px;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 35px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid #ffffff;
+            padding-left: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .search-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-item {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .filter-item label {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.3rem;
+        }
+
+        .filter-item input,
+        .filter-item select {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            background: rgba(255, 255, 255, 0.95);
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .filter-item input:focus,
+        .filter-item select:focus {
+            border-color: #ffffff;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Туристы модалка */
+        .tourists-selector {
+            position: relative;
+        }
+
+        .tourists-input {
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .tourists-modal {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 0.5rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            width: 320px;
+            display: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .tourists-modal.show {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .tourists-header {
+            padding: 1rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .tourists-body {
+            padding: 1rem;
+        }
+
+        .tourist-group {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .tourist-group:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .group-title {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .counter {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #f1f5f9;
+            border-radius: 40px;
+            padding: 0.25rem;
+            width: fit-content;
+        }
+
+        .counter-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #1e293b;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .counter-btn:hover {
+            background: #42C0E8;
+            color: white;
+        }
+
+        .counter-value {
+            font-size: 1rem;
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .children-list {
+            margin-top: 0.8rem;
+            padding-left: 0.5rem;
+        }
+
+        .child-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding: 0.3rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .child-age-select {
+            padding: 0.3rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 0.8rem;
+        }
+
+        .remove-child {
+            background: none;
+            border: none;
+            color: #dc2626;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 0 0.3rem;
+        }
+
+        .add-child-btn {
+            background: none;
+            border: 1px dashed #42C0E8;
+            color: #42C0E8;
+            padding: 0.5rem;
+            border-radius: 40px;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .add-child-btn:hover {
+            background: #eef2ff;
+        }
+
+        .tourists-footer {
+            padding: 1rem;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .select-btn {
+            background: #42C0E8;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .select-btn:hover {
+            background: #2aa8d0;
+        }
+
+        /* Фильтр класса отеля */
+        .filters-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-dropdown {
+            position: relative;
+        }
+
+        .filter-dropdown-btn {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #1e293b;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .filter-dropdown-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .filter-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 0.5rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            min-width: 220px;
+            display: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .filter-dropdown-menu.show {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .filter-options-list {
+            list-style: none;
+            padding: 0.5rem 0;
+        }
+
+        .filter-options-list li {
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .filter-options-list li:hover {
+            background: #f1f5f9;
+        }
+
+        .filter-options-list input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .filter-options-list label {
+            flex: 1;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #1e293b;
+        }
+
+        .dropdown-arrow1 {
+            font-size: 0.7rem;
+            color: #42C0E8;
+            margin-left: 0.3rem;
+        }
+
+        .search-button {
+            background: white;
+            color: #0b5e7e;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: auto;
+            min-width: 200px;
+        }
+
+        .search-button:hover {
+            background: #eef2ff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ============================================ */
+        /* БЛОК НАЙДЕННЫЕ ОТЕЛИ (ВЫДЕЛЕН ОТДЕЛЬНО) */
+        /* ============================================ */
+        .hotels-results-section {
+            background: white;
+            border-radius: 28px;
+            padding: 2rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .hotels-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #42C0E8;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .hotels-header h2 {
+            font-size: 1.8rem;
+            color: #0b3b5f;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+
+        .hotels-count {
+            background: #42C0E8;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .hotels-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .hotel-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            border: 1px solid #edf2f7;
+        }
+
+        .hotel-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px -12px rgba(0, 0, 0, 0.15);
+            border-color: #42C0E8;
+        }
+
+        .hotel-name {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #0f2b3d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .hotel-badge {
+            font-size: 0.7rem;
+            background: #eef2ff;
+            padding: 0.2rem 0.6rem;
+            border-radius: 30px;
+            color: #42C0E8;
+            font-weight: 600;
+        }
+
+        .hotel-stars {
+            color: #f59e0b;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+
+        .hotel-details {
+            margin: 0.5rem 0;
+            font-size: 0.85rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .hotel-details::before {
+            content: "📍";
+        }
+
+        .hotel-price {
+            color: #2c7a4d;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin: 0.8rem 0;
+        }
+
+        .hotel-price-info {
+            font-size: 0.7rem;
+            color: #64748b;
+            font-weight: normal;
+            margin-top: 0.2rem;
+        }
+
+        .hotel-description {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .card-buttons {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .btn-favorite {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .btn-favorite:hover {
+            background: #e6f7ff;
+            border-color: #42C0E8;
+        }
+
+        .btn-favorite.active {
+            background: #42C0E8;
+            color: white;
+            border-color: #42C0E8;
+        }
+
+        .btn-cart {
+            background: #0b5e7e;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .btn-cart:hover {
+            background: #094a64;
+            transform: translateY(-2px);
+        }
+
+        .empty-hotels {
+            text-align: center;
+            padding: 4rem;
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .empty-hotels::before {
+            content: "🔍";
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        /* ============================================ */
+        /* ФУТЕР */
+        /* ============================================ */
+        .footer {
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 3rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+            justify-content: space-between;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: rgb(0, 0, 0);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: #42C0E8;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.6rem;
+            font-size: 0.85rem;
+        }
+
+        .footer-column ul li a {
+            color: #000000;
+            text-decoration: none;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #e2e8f0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            font-size: 0.8rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* ============================================ */
+        /* АНИМАЦИИ */
+        /* ============================================ */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ============================================ */
+        /* АДАПТИВНЫЕ СТИЛИ */
+        /* ============================================ */
+        @media (max-width: 992px) {
+            .top-header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .logo {
+                padding-left: 0;
+                justify-content: center;
+            }
+
+            .user-actions {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .nav-header {
+                padding: 0.8rem 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .hotel-search-section {
+                padding: 30px 30px;
+            }
+
+            .section-title {
+                font-size: 28px;
+                text-align: center;
+                border-left: none;
+                border-bottom: 3px solid white;
+                padding-bottom: 0.5rem;
+            }
+
+            .search-filters {
+                flex-direction: column;
+            }
+
+            .filter-item {
+                min-width: auto;
+            }
+
+            .filters-bar {
+                flex-direction: column;
+            }
+
+            .filter-dropdown {
+                width: 100%;
+            }
+
+            .filter-dropdown-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .hotels-header h2 {
+                font-size: 1.4rem;
+            }
+
+            .hotels-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hotel-search-section {
+                padding: 20px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .search-button {
+                width: 100%;
+            }
+
+            .hotels-results-section {
+                padding: 1.5rem;
+            }
+
+            .hotel-card {
+                padding: 1rem;
+            }
+
+            .hotel-name {
+                font-size: 1rem;
+            }
+
+            .hotel-price {
+                font-size: 1rem;
+            }
+
+            .card-buttons {
+                flex-direction: column;
+            }
+
+            .btn-favorite,
+            .btn-cart {
+                width: 100%;
+                text-align: center;
+            }
+
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-column h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .city-button,
+            .help-link,
+            .account-button {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.75rem;
+            }
+
+            .nav-links a {
+                font-size: 0.75rem;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .hotels-header h2 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="top-header">
+        <div class="logo" onclick="window.location.href='/'">
+            <div class="
+        .footer-bottom {
+            border-top: 1px solid #e2e8f0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            font-size: 0.8rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }">
+                <img src="/image/logo.png" alt="ЛЕТИМ"
+                    onerror="this.src='https://via.placeholder.com/50x50?text=ЛЕТИМ'">
+            </div>
+        </div>
+        <div class="user-actions">
+            <div class="city-selector" id="citySelector">
+                <div class="city-button" id="cityButton">
+                    <span id="selectedCityText">Москва</span>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="city-dropdown" id="cityDropdown">
+                    <div class="city-search">
+                        <input type="text" id="citySearch" placeholder="Поиск города...">
+                    </div>
+                    <div class="city-list" id="cityList"></div>
+                </div>
+            </div>
+            <div class="help-button">
+                <a href="help.html" class="help-link">Помощь</a>
+            </div>
+            <div class="account-menu" id="accountMenu">
+                <div class="account-button" id="accountButton">
+                    <span class="account-name" id="accountName">Войти</span>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="account-dropdown" id="accountDropdown">
+                    <div class="dropdown-header">
+                        <div><strong id="userNameDisplay">Гость</strong></div>
+                        <div class="user-email" id="userEmailDisplay">Войдите в аккаунт</div>
+                    </div>
+                    <div class="dropdown-menu-items">
+                        <a href="auth.html" class="dropdown-item" id="loginLink">Войти</a>
+                        <a href="auth.html" class="dropdown-item" id="registerLink">Зарегистрироваться</a>
+                        <div class="dropdown-divider" id="divider1"></div>
+                        <a href="favorites.html" class="dropdown-item">Избранное</a>
+                        <a href="zak.html" class="dropdown-item">Мои заказы</a>
+                        <a href="set.html" class="dropdown-item">Настройки</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="admin.html" class="dropdown-item" id="adminLink" style="display: none;">👑
+                            Админ-панель</a>
+                        <div class="dropdown-divider" id="divider2"></div>
+                        <a href="#" class="dropdown-item logout-item" id="logoutLink" style="display: none;">Выход</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav-header">
+        <div class="nav-links">
+            <a href="index.html">Поиск туров</a>
+            <a href="index1.html" class="active">Поиск отелей</a>
+            <a href="tour.html">Туры</a>
+            <a href="about.html">О нас</a>
+            <a href="favorites.html">Избранное</a>
+            <a href="korz.html" class="cart-link">
+                Корзина
+                <span class="cart-count" id="cartCount">0</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hotel-search-section">
+            <h2 class="section-title">Поиск отеля</h2>
+
+            <div class="search-filters">
+                <div class="filter-item">
+                    <label>Название отеля</label>
+                    <input type="text" placeholder="Введите название отеля" id="hotelNameSearch">
+                </div>
+                <div class="filter-item">
+                    <label>Страна</label>
+                    <select id="country">
+                        <option value="all">Все страны</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label>Город/Курорт</label>
+                    <input type="text" placeholder="Город или курорт" id="location">
+                </div>
+                <div class="filter-item">
+                    <label>Цена за номер (₽/ночь)</label>
+                    <input type="number" placeholder="Максимальная цена" id="maxPrice" min="0">
+                </div>
+                <div class="filter-item">
+                    <label>Количество ночей</label>
+                    <input type="number" id="nights" value="7" min="1" max="30" step="1">
+                </div>
+                <div class="filter-item">
+                    <label>Туристы</label>
+                    <div class="tourists-selector" id="touristsSelector">
+                        <input type="text" id="touristsInput" class="tourists-input" placeholder="Туристы" readonly>
+                        <div class="tourists-modal" id="touristsModal">
+                            <div class="tourists-header">Туристы</div>
+                            <div class="tourists-body">
+                                <div class="tourist-group">
+                                    <div class="group-header">
+                                        <span class="group-title">Взрослые</span>
+                                        <div class="counter">
+                                            <button class="counter-btn" id="adultsMinus">-</button>
+                                            <span class="counter-value" id="adultsCount">2</span>
+                                            <button class="counter-btn" id="adultsPlus">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tourist-group">
+                                    <div class="group-header">
+                                        <span class="group-title">Дети</span>
+                                        <div class="counter">
+                                            <button class="counter-btn" id="childrenMinus">-</button>
+                                            <span class="counter-value" id="childrenCount">0</span>
+                                            <button class="counter-btn" id="childrenPlus">+</button>
+                                        </div>
+                                    </div>
+                                    <div class="children-list" id="childrenList"></div>
+                                    <button class="add-child-btn" id="addChildBtn">+ Добавить ребенка</button>
+                                </div>
+                            </div>
+                            <div class="tourists-footer">
+                                <button class="select-btn" id="selectTouristsBtn">Выбрать</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filters-bar">
+                <div class="filter-dropdown" id="hotelClassDropdown">
+                    <div class="filter-dropdown-btn" id="hotelClassBtn">
+                        Класс отеля <span class="dropdown-arrow1">▼</span>
+                    </div>
+                    <div class="filter-dropdown-menu" id="hotelClassMenu">
+                        <ul class="filter-options-list">
+                            <li><input type="radio" name="hotelClass" value="all" checked> <label>Любой</label></li>
+                            <li><input type="radio" name="hotelClass" value="5"> <label>5 звезд ★★★★★</label></li>
+                            <li><input type="radio" name="hotelClass" value="4"> <label>4 звезды ★★★★</label></li>
+                            <li><input type="radio" name="hotelClass" value="3"> <label>3 звезды ★★★</label></li>
+                            <li><input type="radio" name="hotelClass" value="2"> <label>2 звезды ★★</label></li>
+                            <li><input type="radio" name="hotelClass" value="1"> <label>1 звезда ★</label></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <button class="search-button" id="searchBtn">Найти отели</button>
+        </div>
+
+        <!-- БЛОК НАЙДЕННЫЕ ОТЕЛИ (ВЫДЕЛЕН ОТДЕЛЬНО) -->
+        <div class="hotels-results-section">
+            <div class="hotels-header">
+                <h2>Найденные отели</h2>
+                <button id="resetFiltersBtn"
+                    style="background:#5c97c4; color:white; border-radius:30px; border:none; padding:8px 20px; cursor: pointer; font-weight:600;">Сбросить
+                    фильтры</button>
+            </div>
+            <div class="hotels-list" id="hotelsList"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="/image/logo.png" alt="ЛЕТИМ" style="height: 50px;" onerror="this.style.display='none'">
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>О компании</h3>
+                    <ul>
+                        <li><a href="about.html">О нас</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Туристам</h3>
+                    <ul>
+                        <li><a href="index.html">Поиск туров</a></li>
+                        <li><a href="index1.html">Поиск отелей</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul>
+                        <li>8987-8987-00-2</li>
+                        <li>LETIM.OREN@MAIL.RU</li>
+                        <li>г. Оренбург, ул. Чкалова, д. 2</li>
+                        <li>Пн-Пт: 11:00-20:00</li>
+                        <li>Сб: 10:00-15:00</li>
+                        <li>Вс: выходной</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-social">
+                <a href="#"><img src="https://maxicons.ru/icons/Max_logo_black.svg" alt="MAX" width="24"></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ==================== КОНФИГУРАЦИЯ ====================
+        const API_URL = 'http://localhost:3003/api';
+        // ==================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====================
+        let currentUser = null;
+        let hotelsDatabase = [];
+        let favorites = [];
+        let cart = [];
+        let adultsCount = 2, childrenCount = 0, childrenAges = [];
+
+        // ==================== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ====================
+        function showNotification(message, isSuccess = true) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${isSuccess ? '#0b5e7e' : '#dc2626'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                z-index: 10000;
+                animation: fadeIn 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            `;
+            notification.innerText = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        function getTotalPersons() {
+            return adultsCount + childrenCount;
+        }
+
+        // ==================== РАБОТА С СЕРВЕРОМ ====================
+        async function fetchCurrentUser() {
+            try {
+                const response = await fetch(`${API_URL}/auth/me`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.user) {
+                        currentUser = data.user;
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        console.log('✅ Пользователь авторизован:', currentUser.name);
+                    } else {
+                        currentUser = null;
+                        localStorage.removeItem('currentUser');
+                    }
+                } else {
+                    currentUser = null;
+                    localStorage.removeItem('currentUser');
+                }
+            } catch (error) {
+                console.error('❌ Ошибка получения пользователя:', error);
+                currentUser = null;
+            }
+            updateUserUI();
+        }
+
+        async function fetchHotels() {
+            try {
+                const response = await fetch(`${API_URL}/hotels`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    hotelsDatabase = await response.json();
+                    console.log(`✅ Загружено отелей с сервера: ${hotelsDatabase.length}`);
+                    return hotelsDatabase;
+                }
+            } catch (error) {
+                console.error('❌ Ошибка получения отелей:', error);
+                hotelsDatabase = [];
+            }
+            return [];
+        }
+
+        async function fetchFavorites() {
+            if (!currentUser) return [];
+            try {
+                const response = await fetch(`${API_URL}/favorites`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    favorites = data;
+                    document.getElementById('favoritesCount').innerText = favorites.length;
+                    console.log(`❤️ Загружено избранное: ${favorites.length} отелей`);
+                    return favorites;
+                }
+            } catch (error) {
+                console.error('Ошибка получения избранного:', error);
+            }
+            return [];
+        }
+
+        async function fetchCart() {
+            if (!currentUser) return [];
+            try {
+                const response = await fetch(`${API_URL}/cart`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    cart = await response.json();
+                    document.getElementById('cartCount').innerText = cart.length;
+                    console.log(`🛒 Загружена корзина: ${cart.length} товаров`);
+                    return cart;
+                }
+            } catch (error) {
+                console.error('Ошибка получения корзины:', error);
+            }
+            return [];
+        }
+
+        async function addToFavorites(hotelId) {
+            if (!currentUser) {
+                showNotification('Войдите в аккаунт, чтобы добавить в избранное', false);
+                return false;
+            }
+            try {
+                const response = await fetch(`${API_URL}/favorites`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ hotelId: hotelId })
+                });
+                if (response.ok) {
+                    showNotification('Отель добавлен в избранное');
+                    await fetchFavorites();
+                    return true;
+                }
+            } catch (error) {
+                console.error('Ошибка добавления в избранное:', error);
+            }
+            return false;
+        }
+
+        async function removeFromFavorites(hotelId) {
+            if (!currentUser) return false;
+            try {
+                const response = await fetch(`${API_URL}/favorites/${hotelId}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    showNotification('Отель удален из избранного');
+                    await fetchFavorites();
+                    return true;
+                }
+            } catch (error) {
+                console.error('Ошибка удаления из избранного:', error);
+            }
+            return false;
+        }
+
+        async function addToCart(item) {
+            if (!currentUser) {
+                showNotification('Войдите в аккаунт, чтобы добавить в корзину', false);
+                return false;
+            }
+            try {
+                const response = await fetch(`${API_URL}/cart`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        hotelId: item.id,
+                        type: 'hotel',
+                        price: item.price,
+                        name: item.name,
+                        quantity: 1
+                    })
+                });
+                if (response.ok) {
+                    showNotification(`${item.name} добавлен в корзину`);
+                    await fetchCart();
+                    return true;
+                } else {
+                    const data = await response.json();
+                    if (data.error === 'Товар уже в корзине') {
+                        showNotification('Товар уже в корзине', false);
+                    }
+                }
+            } catch (error) {
+                console.error('Ошибка добавления в корзину:', error);
+            }
+            return false;
+        }
+
+        async function logout() {
+            try {
+                await fetch(`${API_URL}/auth/logout`, { method: 'POST', credentials: 'include' });
+            } catch (error) {
+                console.error('Ошибка при выходе:', error);
+            }
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            updateUserUI();
+            showNotification('Вы вышли из аккаунта');
+            setTimeout(() => location.reload(), 1000);
+        }
+
+        // ==================== ОТОБРАЖЕНИЕ ====================
+        function updateUserUI() {
+            const accountName = document.getElementById('accountName');
+            const userNameDisplay = document.getElementById('userNameDisplay');
+            const userEmailDisplay = document.getElementById('userEmailDisplay');
+            const loginLink = document.getElementById('loginLink');
+            const registerLink = document.getElementById('registerLink');
+            const divider1 = document.getElementById('divider1');
+            const logoutLink = document.getElementById('logoutLink');
+            const adminLink = document.getElementById('adminLink');
+            const divider2 = document.getElementById('divider2');
+
+            if (currentUser) {
+                const displayName = currentUser.name.split(' ')[0] || currentUser.name;
+                if (accountName) accountName.innerText = displayName;
+                if (userNameDisplay) userNameDisplay.innerText = currentUser.name;
+                if (userEmailDisplay) userEmailDisplay.innerText = currentUser.email;
+                if (loginLink) loginLink.style.display = 'none';
+                if (registerLink) registerLink.style.display = 'none';
+                if (divider1) divider1.style.display = 'none';
+                if (logoutLink) logoutLink.style.display = 'flex';
+
+                if (currentUser.role === 'admin' && adminLink) {
+                    adminLink.style.display = 'flex';
+                    if (divider2) divider2.style.display = 'block';
+                } else if (adminLink) {
+                    adminLink.style.display = 'none';
+                    if (divider2) divider2.style.display = 'none';
+                }
+            } else {
+                if (accountName) accountName.innerText = 'Войти';
+                if (userNameDisplay) userNameDisplay.innerText = 'Гость';
+                if (userEmailDisplay) userEmailDisplay.innerText = 'Войдите в аккаунт';
+                if (loginLink) loginLink.style.display = 'flex';
+                if (registerLink) registerLink.style.display = 'flex';
+                if (divider1) divider1.style.display = 'block';
+                if (logoutLink) logoutLink.style.display = 'none';
+                if (adminLink) adminLink.style.display = 'none';
+                if (divider2) divider2.style.display = 'none';
+            }
+        }
+
+        function loadCountriesToSelect() {
+            const uniqueCountries = [...new Set(hotelsDatabase.map(hotel => hotel.country))];
+            const countrySelect = document.getElementById('country');
+            if (countrySelect) {
+                countrySelect.innerHTML = '<option value="all">Все страны</option>' +
+                    uniqueCountries.map(country => `<option value="${country}">${country}</option>`).join('');
+            }
+        }
+
+        async function searchHotels() {
+            await fetchHotels();
+            loadCountriesToSelect();
+
+            const hotelNameSearch = document.getElementById('hotelNameSearch')?.value.toLowerCase() || '';
+            const selectedCountry = document.getElementById('country')?.value || 'all';
+            const locationSearch = document.getElementById('location')?.value.toLowerCase() || '';
+            const maxPricePerNight = parseInt(document.getElementById('maxPrice')?.value) || Infinity;
+            const hotelClass = document.querySelector('input[name="hotelClass"]:checked')?.value || 'all';
+            const nights = parseInt(document.getElementById('nights')?.value) || 7;
+            const persons = getTotalPersons();
+
+            let filteredHotels = hotelsDatabase.filter(hotel => hotel.is_active !== false);
+
+            if (hotelNameSearch) {
+                filteredHotels = filteredHotels.filter(hotel => hotel.name.toLowerCase().includes(hotelNameSearch));
+            }
+            if (selectedCountry !== 'all') {
+                filteredHotels = filteredHotels.filter(hotel => hotel.country === selectedCountry);
+            }
+            if (locationSearch) {
+                filteredHotels = filteredHotels.filter(hotel =>
+                    hotel.location.toLowerCase().includes(locationSearch)
+                );
+            }
+            if (maxPricePerNight !== Infinity) {
+                filteredHotels = filteredHotels.filter(hotel => hotel.price <= maxPricePerNight);
+            }
+            if (hotelClass !== 'all') {
+                filteredHotels = filteredHotels.filter(hotel => hotel.stars === parseInt(hotelClass));
+            }
+
+            filteredHotels.sort((a, b) => a.price - b.price);
+            displayHotels(filteredHotels, nights, persons);
+        }
+
+        function displayHotels(hotels, nights, persons) {
+            const hotelsList = document.getElementById('hotelsList');
+            if (!hotelsList) return;
+
+            if (hotels.length === 0) {
+                hotelsList.innerHTML = '<div class="empty-hotels">По вашему запросу ничего не найдено</div>';
+                return;
+            }
+
+            hotelsList.innerHTML = hotels.map(hotel => {
+                const totalPrice = hotel.price * nights * persons;
+                const isFav = favorites.some(f => f.id === hotel.id);
+                const starsHtml = hotel.stars > 0 ? '★'.repeat(hotel.stars) : '☆';
+                return `
+                    <div class="hotel-card" data-hotel-id="${hotel.id}">
+                        <div class="hotel-name">
+                            ${escapeHtml(hotel.name)}
+                            <span class="hotel-badge">${hotel.stars > 0 ? hotel.stars + '★' : 'Без звезд'}</span>
+                        </div>
+                        <div class="hotel-stars">${starsHtml}</div>
+                        <div class="hotel-details">${escapeHtml(hotel.location)}, ${escapeHtml(hotel.country)} | Рейтинг: ${hotel.rating || 'Нет'}</div>
+                        <div class="hotel-price">
+                            ${hotel.price.toLocaleString()} ₽ / ночь
+                            <div class="hotel-price-info">Итого за ${nights} ночей на ${persons} чел: ${totalPrice.toLocaleString()} ₽</div>
+                        </div>
+                        <div class="hotel-description">${escapeHtml(hotel.description || '')}</div>
+                        <div class="card-buttons">
+                            <button class="btn-favorite ${isFav ? 'active' : ''}" data-id="${hotel.id}">${isFav ? '❤️' : '🤍'}</button>
+                            <button class="btn-cart" data-id="${hotel.id}" data-name="${escapeHtml(hotel.name)}" data-price="${totalPrice}">🛒 В корзину</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.querySelectorAll('.btn-favorite').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const hotelId = parseInt(btn.dataset.id);
+                    const hotel = hotels.find(h => h.id === hotelId);
+                    if (hotel) {
+                        const isFav = favorites.some(f => f.id === hotelId);
+                        if (isFav) {
+                            await removeFromFavorites(hotelId);
+                        } else {
+                            await addToFavorites(hotelId);
+                        }
+                        await searchHotels();
+                    }
+                });
+            });
+
+            document.querySelectorAll('.btn-cart').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const hotelId = parseInt(btn.dataset.id);
+                    const hotel = hotels.find(h => h.id === hotelId);
+                    if (hotel) {
+                        const nights = parseInt(document.getElementById('nights')?.value) || 7;
+                        const persons = getTotalPersons();
+                        const totalPrice = hotel.price * nights * persons;
+                        await addToCart({
+                            id: hotel.id,
+                            name: hotel.name,
+                            price: totalPrice,
+                            type: 'hotel'
+                        });
+                    }
+                });
+            });
+        }
+
+        function resetAllFilters() {
+            document.getElementById('hotelNameSearch').value = '';
+            document.getElementById('country').value = 'all';
+            document.getElementById('location').value = '';
+            document.getElementById('maxPrice').value = '';
+            document.getElementById('nights').value = '7';
+            document.querySelector('input[name="hotelClass"][value="all"]').checked = true;
+            adultsCount = 2;
+            childrenCount = 0;
+            childrenAges = [];
+            updateCounters();
+            updateTouristsDisplay();
+            renderChildrenList();
+            searchHotels();
+            showNotification('Все фильтры сброшены');
+        }
+
+        // ==================== ТУРИСТЫ ====================
+        function updateTouristsDisplay() {
+            let text = `${adultsCount} взрослых`;
+            if (childrenCount > 0) text += `, ${childrenCount} ${childrenCount === 1 ? 'ребёнок' : childrenCount <= 4 ? 'ребенка' : 'детей'}`;
+            const touristsInput = document.getElementById('touristsInput');
+            if (touristsInput) touristsInput.value = text;
+        }
+
+        function updateCounters() {
+            const adultsCountSpan = document.getElementById('adultsCount');
+            const childrenCountSpan = document.getElementById('childrenCount');
+            if (adultsCountSpan) adultsCountSpan.innerText = adultsCount;
+            if (childrenCountSpan) childrenCountSpan.innerText = childrenCount;
+        }
+
+        function renderChildrenList() {
+            const container = document.getElementById('childrenList');
+            if (!container) return;
+            if (childrenCount === 0) {
+                container.innerHTML = '';
+                return;
+            }
+            let html = '';
+            for (let i = 0; i < childrenCount; i++) {
+                html += `<div class="child-item"><span>Ребенок ${i + 1}</span><select class="child-age-select"><option value="">Возраст</option>${generateAgeOptions(childrenAges[i])}</select><button class="remove-child">×</button></div>`;
+            }
+            container.innerHTML = html;
+            document.querySelectorAll('.child-age-select').forEach((select, idx) => {
+                select.addEventListener('change', (e) => childrenAges[idx] = e.target.value);
+            });
+            document.querySelectorAll('.remove-child').forEach((btn, idx) => {
+                btn.addEventListener('click', () => {
+                    childrenAges.splice(idx, 1);
+                    childrenCount--;
+                    renderChildrenList();
+                    updateTouristsDisplay();
+                    searchHotels();
+                });
+            });
+        }
+
+        function generateAgeOptions(selectedAge) {
+            let options = '<option value="">Возраст</option>';
+            for (let age = 0; age <= 17; age++) {
+                options += `<option value="${age}" ${selectedAge == age ? 'selected' : ''}>${age} лет</option>`;
+            }
+            return options;
+        }
+
+        function initTouristsModal() {
+            const touristsInput = document.getElementById('touristsInput');
+            const touristsModal = document.getElementById('touristsModal');
+            const touristsSelector = document.getElementById('touristsSelector');
+
+            if (touristsInput && touristsModal) {
+                touristsInput.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    touristsModal.classList.toggle('show');
+                });
+                document.addEventListener('click', (e) => {
+                    if (touristsSelector && !touristsSelector.contains(e.target)) {
+                        touristsModal.classList.remove('show');
+                    }
+                });
+            }
+
+            const adultsMinus = document.getElementById('adultsMinus');
+            const adultsPlus = document.getElementById('adultsPlus');
+            const childrenMinus = document.getElementById('childrenMinus');
+            const childrenPlus = document.getElementById('childrenPlus');
+            const addChildBtn = document.getElementById('addChildBtn');
+            const selectTouristsBtn = document.getElementById('selectTouristsBtn');
+
+            if (adultsMinus) adultsMinus.addEventListener('click', () => { if (adultsCount > 1) { adultsCount--; updateCounters(); updateTouristsDisplay(); searchHotels(); } });
+            if (adultsPlus) adultsPlus.addEventListener('click', () => { if (adultsCount < 10) { adultsCount++; updateCounters(); updateTouristsDisplay(); searchHotels(); } });
+            if (childrenMinus) childrenMinus.addEventListener('click', () => { if (childrenCount > 0) { childrenCount--; childrenAges.pop(); updateCounters(); renderChildrenList(); updateTouristsDisplay(); searchHotels(); } });
+            if (childrenPlus) childrenPlus.addEventListener('click', () => { if (childrenCount < 5) { childrenCount++; childrenAges.push(''); updateCounters(); renderChildrenList(); updateTouristsDisplay(); searchHotels(); } });
+            if (addChildBtn) addChildBtn.addEventListener('click', () => { if (childrenCount < 5) { childrenCount++; childrenAges.push(''); updateCounters(); renderChildrenList(); updateTouristsDisplay(); searchHotels(); } });
+            if (selectTouristsBtn) selectTouristsBtn.addEventListener('click', () => { if (touristsModal) touristsModal.classList.remove('show'); updateTouristsDisplay(); searchHotels(); });
+        }
+
+        // ==================== ГОРОДА ====================
+        const cities = ["Москва", "Санкт-Петербург", "Екатеринбург", "Казань", "Новосибирск", "Сочи", "Краснодар", "Оренбург"];
+        let selectedCity = localStorage.getItem('selectedCity') || "Москва";
+
+        function renderCityList(filterText = '') {
+            const filteredCities = cities.filter(city => city.toLowerCase().includes(filterText.toLowerCase()));
+            const cityList = document.getElementById('cityList');
+            if (cityList) {
+                cityList.innerHTML = filteredCities.map(city => `
+                    <div class="city-item ${city === selectedCity ? 'selected' : ''}" data-city="${city}">
+                        <span>${city}</span>${city === selectedCity ? '<span style="margin-left: auto;">✓</span>' : ''}
+                    </div>
+                `).join('');
+                document.querySelectorAll('.city-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        selectedCity = item.dataset.city;
+                        localStorage.setItem('selectedCity', selectedCity);
+                        document.getElementById('selectedCityText').innerText = selectedCity;
+                        renderCityList('');
+                        const cityDropdown = document.getElementById('cityDropdown');
+                        if (cityDropdown) cityDropdown.classList.remove('show');
+                    });
+                });
+            }
+        }
+
+        function initCitySelector() {
+            const selectedCityText = document.getElementById('selectedCityText');
+            if (selectedCityText) selectedCityText.innerText = selectedCity;
+            renderCityList('');
+
+            const cityButton = document.getElementById('cityButton');
+            const cityDropdown = document.getElementById('cityDropdown');
+            const citySearch = document.getElementById('citySearch');
+
+            if (cityButton && cityDropdown) {
+                cityButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    cityDropdown.classList.toggle('show');
+                    if (cityDropdown.classList.contains('show') && citySearch) {
+                        renderCityList('');
+                        citySearch.focus();
+                    }
+                });
+            }
+            if (citySearch) {
+                citySearch.addEventListener('input', (e) => renderCityList(e.target.value));
+            }
+            document.addEventListener('click', (e) => {
+                const citySelector = document.getElementById('citySelector');
+                if (citySelector && !citySelector.contains(e.target) && cityDropdown) {
+                    cityDropdown.classList.remove('show');
+                }
+            });
+        }
+
+        // ==================== ВЫПАДАЮЩИЕ СПИСКИ ====================
+        function initDropdown(dropdownId, btnId, menuId) {
+            const dropdown = document.getElementById(dropdownId);
+            const btn = document.getElementById(btnId);
+            const menu = document.getElementById(menuId);
+            if (btn && menu) {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    menu.classList.toggle('show');
+                    btn.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (dropdown && !dropdown.contains(e.target)) {
+                        menu.classList.remove('show');
+                        if (btn) btn.classList.remove('active');
+                    }
+                });
+                menu.querySelectorAll('input').forEach(input => {
+                    input.addEventListener('change', () => {
+                        setTimeout(() => {
+                            menu.classList.remove('show');
+                            if (btn) btn.classList.remove('active');
+                            searchHotels();
+                        }, 150);
+                    });
+                });
+            }
+        }
+
+        function initAccountMenu() {
+            const accountButton = document.getElementById('accountButton');
+            const accountDropdown = document.getElementById('accountDropdown');
+            if (accountButton && accountDropdown) {
+                accountButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    accountDropdown.classList.toggle('show');
+                });
+                const logoutLink = document.getElementById('logoutLink');
+                if (logoutLink) {
+                    logoutLink.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        await logout();
+                    });
+                }
+                document.addEventListener('click', (e) => {
+                    const accountMenu = document.getElementById('accountMenu');
+                    if (accountMenu && !accountMenu.contains(e.target) && accountDropdown) {
+                        accountDropdown.classList.remove('show');
+                    }
+                });
+            }
+        }
+
+        // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+        async function init() {
+            console.log('🚀 Инициализация страницы поиска отелей...');
+            console.log('📡 API URL:', API_URL);
+
+            initCitySelector();
+            initTouristsModal();
+            initAccountMenu();
+            initDropdown('hotelClassDropdown', 'hotelClassBtn', 'hotelClassMenu');
+
+            await fetchCurrentUser();
+            await fetchFavorites();
+            await fetchCart();
+            await fetchHotels();
+
+            updateTouristsDisplay();
+            renderChildrenList();
+            loadCountriesToSelect();
+            searchHotels();
+
+            const searchBtn = document.getElementById('searchBtn');
+            const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+            const countrySelect = document.getElementById('country');
+            const hotelNameSearch = document.getElementById('hotelNameSearch');
+            const locationSearch = document.getElementById('location');
+            const maxPriceInput = document.getElementById('maxPrice');
+            const nightsInput = document.getElementById('nights');
+
+            if (searchBtn) searchBtn.addEventListener('click', searchHotels);
+            if (resetFiltersBtn) resetFiltersBtn.addEventListener('click', resetAllFilters);
+            if (countrySelect) countrySelect.addEventListener('change', searchHotels);
+            if (hotelNameSearch) hotelNameSearch.addEventListener('input', searchHotels);
+            if (locationSearch) locationSearch.addEventListener('input', searchHotels);
+            if (maxPriceInput) maxPriceInput.addEventListener('input', searchHotels);
+            if (nightsInput) nightsInput.addEventListener('input', searchHotels);
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

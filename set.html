@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Island+Moments&family=Italianno&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Kapakana:wght@300..400&family=Karma:wght@300;400;500;600;700&family=Kurale&family=Lora:ital,wght@0,400..700;1,400..700&family=Oswald:wght@200..700&family=Pangolin&family=Pattaya&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Playwrite+GB+J+Guides:ital@0;1&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Vidaloka&display=swap"
+        rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЛЕТИМ | Настройки профиля</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7fa;
+            color: #1a2c3e;
+        }
+
+        .top-header {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding-left: 120px;
+        }
+
+        .help-link,
+        .city-button,
+        .account-button {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+
+        .help-link:hover,
+        .city-button:hover,
+        .account-button:hover {
+            background: rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .city-selector,
+        .account-menu {
+            position: relative;
+        }
+
+        .city-dropdown,
+        .account-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 0.5rem;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            min-width: 220px;
+            display: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .city-dropdown.show,
+        .account-dropdown.show {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .city-search {
+            padding: 0.8rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .city-search input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+        }
+
+        .city-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .city-item {
+            padding: 0.7rem 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .city-item:hover {
+            background: #f0f2f5;
+        }
+
+        .city-item.selected {
+            background: #eef2ff;
+            color: #0b3b5f;
+            font-weight: 600;
+        }
+
+        .dropdown-arrow {
+            font-size: 0.7rem;
+            transition: transform 0.3s;
+        }
+
+        .account-button.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .account-dropdown {
+            left: auto;
+            right: 0;
+            min-width: 260px;
+        }
+
+        .dropdown-header {
+            padding: 1rem;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .user-email {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 0.2rem;
+        }
+
+        .dropdown-menu-items {
+            padding: 0.5rem 0;
+        }
+
+        .dropdown-item {
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            color: #1e293b;
+            text-decoration: none;
+        }
+
+        .dropdown-item:hover {
+            background: #f1f5f9;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e2e8f0;
+            margin: 0.5rem 0;
+        }
+
+        .logout-item {
+            color: #dc2626;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-header {
+            background: #42C0E8;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #000000;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 0;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #696969;
+            border-bottom-color: #23697e;
+        }
+
+        .cart-link,
+        .favorites-link {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-count,
+        .favorites-count {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background: #BCEFFF;
+            color: rgb(0, 0, 0);
+            font-size: 0.7rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 50%;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .settings-section {
+            background: white;
+            border-radius: 28px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .settings-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b3b5f;
+            margin-bottom: 2rem;
+            border-left: 5px solid #42C0E8;
+            padding-left: 1rem;
+        }
+
+        .settings-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e2e8f0;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.8rem 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: #42C0E8;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #42C0E8;
+        }
+
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .settings-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #4a627a;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #42C0E8;
+            box-shadow: 0 0 0 3px rgba(66, 192, 232, 0.1);
+        }
+
+        .form-group input.error,
+        .form-group select.error {
+            border-color: #dc2626;
+        }
+
+        .error-message {
+            color: #dc2626;
+            font-size: 0.75rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .success-message {
+            color: #10b981;
+            font-size: 0.75rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .avatar-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            flex-wrap: wrap;
+        }
+
+        .avatar-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #42C0E8, #2aa8d0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .avatar-upload {
+            flex: 1;
+        }
+
+        .avatar-upload button {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .avatar-upload button:hover {
+            background: #e2e8f0;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+
+        .btn-save {
+            background: #42C0E8;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-save:hover {
+            background: #2aa8d0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(66, 192, 232, 0.3);
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+        }
+
+        .danger-zone {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .danger-zone h3 {
+            font-size: 1rem;
+            color: #dc2626;
+            margin-bottom: 0.5rem;
+        }
+
+        .danger-zone p {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        .notification-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-info h4 {
+            font-size: 1rem;
+            color: #1e293b;
+            margin-bottom: 0.2rem;
+        }
+
+        .notification-info p {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        .toggle-switch {
+            width: 50px;
+            height: 26px;
+            background: #cbd5e1;
+            border-radius: 30px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #42C0E8;
+        }
+
+        .toggle-slider {
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 3px;
+            transition: all 0.3s;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            left: 25px;
+        }
+
+        .footer {
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 3rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+            justify-content: space-between;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: rgb(0, 0, 0);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: #42C0E8;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.6rem;
+            font-size: 0.85rem;
+        }
+
+        .footer-column ul li a {
+            color: #000000;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-column ul li a:hover {
+            color: #42C0E8;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #e2e8f0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            font-size: 0.8rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .top-header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            .logo {
+                padding-left: 0;
+                justify-content: center;
+            }
+            .user-actions {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            .nav-header {
+                padding: 0.8rem 1rem;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 1rem;
+            }
+            .settings-section {
+                padding: 1.5rem;
+            }
+            .settings-title {
+                font-size: 1.5rem;
+            }
+            .settings-tabs {
+                justify-content: center;
+            }
+            .tab-btn {
+                font-size: 0.85rem;
+                padding: 0.5rem 0;
+            }
+            .avatar-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            .form-actions {
+                justify-content: center;
+            }
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-column h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+   <header class="top-header">
+        <div class="logo" onclick="window.location.href='/'">
+            <div class="logo-text">
+                <img src="/image/logo.png" alt="ЛЕТИМ" onerror="this.src='https://via.placeholder.com/50x50?text=ЛЕТИМ'">
+            </div>
+        </div>
+        <div class="user-actions">
+            <div class="city-selector" id="citySelector">
+                <div class="city-button" id="cityButton">
+                    <span id="selectedCityText">Москва</span>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="city-dropdown" id="cityDropdown">
+                    <div class="city-search">
+                        <input type="text" id="citySearch" placeholder="Поиск города...">
+                    </div>
+                    <div class="city-list" id="cityList"></div>
+                </div>
+            </div>
+
+            <div class="help-button">
+                <a href="help.html" class="help-link">
+                    <span>Помощь</span>
+                </a>
+            </div>
+
+            <div class="account-menu" id="accountMenu">
+                <div class="account-button" id="accountButton">
+                    <span class="account-name" id="accountName">Войти</span>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <div class="account-dropdown" id="accountDropdown">
+                    <div class="dropdown-header">
+                        <div><strong id="userNameDisplay">Гость</strong></div>
+                        <div class="user-email" id="userEmailDisplay">Войдите в аккаунт</div>
+                    </div>
+                    <div class="dropdown-menu-items">
+                        <a href="auth.html" class="dropdown-item" id="loginLink">Войти</a>
+                        <a href="auth.html" class="dropdown-item" id="registerLink">Зарегистрироваться</a>
+                        <div class="dropdown-divider" id="divider1"></div>
+                         
+                        <a href="zak.html" class="dropdown-item">Мои заказы</a>
+                        <a href="set.html" class="dropdown-item">Настройки</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="admin.html" class="dropdown-item" id="adminLink" style="display: none;">Админ-панель</a>
+                        <div class="dropdown-divider" id="divider2"></div>
+                        <a href="#" class="dropdown-item logout-item" id="logoutLink" style="display: none;">Выход</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="nav-header">
+        <div class="nav-links">
+            <a href="index.html">Поиск туров</a>
+            <a href="index1.html">Поиск отелей</a>
+            <a href="tour.html">Туры</a>
+            <a href="about.html">О нас</a>
+            <a href="favorites.html" class="active">
+                Избранное
+            </a>
+            <a href="korz.html" class="cart-link">
+                Корзина
+                <span class="cart-count" id="cartCount">0</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="main-container">
+        <div class="settings-section">
+            <h1 class="settings-title">Настройки профиля</h1>
+
+            <div class="settings-tabs">
+                <button class="tab-btn active" onclick="switchTab('profile')">👤 Профиль</button>
+                <button class="tab-btn" onclick="switchTab('security')">🔒 Безопасность</button>
+                <button class="tab-btn" onclick="switchTab('notifications')">🔔 Уведомления</button>
+            </div>
+
+            <!-- Вкладка Профиль -->
+            <div id="profileTab" class="tab-pane active">
+                <div class="settings-form">
+                    <div class="avatar-section">
+                        <div class="avatar-preview" id="avatarPreview">👤</div>
+                        <div class="avatar-upload">
+                            <button onclick="document.getElementById('avatarInput').click()">📸 Изменить аватар</button>
+                            <input type="file" id="avatarInput" accept="image/*" style="display: none" onchange="changeAvatar(this)">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Имя и фамилия</label>
+                        <input type="text" id="profileName" placeholder="Иванов Иван Иванович">
+                        <div class="error-message" id="nameError"></div>
+                        <div class="success-message" id="nameSuccess"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="profileEmail" placeholder="example@mail.ru">
+                        <div class="error-message" id="emailError"></div>
+                        <div class="success-message" id="emailSuccess"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Телефон</label>
+                        <input type="tel" id="profilePhone" placeholder="+7 (999) 123-45-67">
+                        <div class="error-message" id="phoneError"></div>
+                        <div class="success-message" id="phoneSuccess"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Дата рождения</label>
+                        <input type="date" id="profileBirthDate">
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn-save" onclick="saveProfile()">💾 Сохранить изменения</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка Безопасность -->
+            <div id="securityTab" class="tab-pane">
+                <div class="settings-form">
+                    <div class="form-group">
+                        <label>Текущий пароль</label>
+                        <input type="password" id="currentPassword" placeholder="Введите текущий пароль">
+                        <div class="error-message" id="currentPasswordError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Новый пароль</label>
+                        <input type="password" id="newPassword" placeholder="Минимум 6 символов">
+                        <div class="error-message" id="newPasswordError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Подтверждение пароля</label>
+                        <input type="password" id="confirmPassword" placeholder="Повторите новый пароль">
+                        <div class="error-message" id="confirmPasswordError"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn-save" onclick="changePassword()">🔑 Сменить пароль</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка Уведомления (только Email) -->
+            <div id="notificationsTab" class="tab-pane">
+                <div class="settings-form">
+                    <div class="notification-item">
+                        <div class="notification-info">
+                            <h4>📧 Email уведомления</h4>
+                            <p>Получать новости о акциях и спецпредложениях</p>
+                        </div>
+                        <div class="toggle-switch" id="emailNotifications" onclick="toggleNotification('email')">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn-save" onclick="saveNotifications()">💾 Сохранить настройки</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="/image/logo.png" alt="ЛЕТИМ" style="height: 50px;" onerror="this.style.display='none'">
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>О компании</h3>
+                    <ul>
+                        <li><a href="about.html">О нас</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Туристам</h3>
+                    <ul>
+                        <li><a href="index.html">Поиск туров</a></li>
+                        <li><a href="index1.html">Поиск отелей</a></li>
+                        <li><a href="tour.html">Горящие туры</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul>
+                        <li>8987-8987-00-2</li>
+                        <li>LETIM.OREN@MAIL.RU</li>
+                        <li>г. Оренбург, ул. Чкалова, д. 2</li>
+                        <li>Пн-Пт: 11:00-20:00</li>
+                        <li>Сб: 10:00-15:00</li>
+                        <li>Вс: выходной</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-social">
+                <a href="#"><img src="https://maxicons.ru/icons/Max_logo_black.svg" alt="MAX" width="24"></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'http://localhost:3003/api';
+        let currentUser = null;
+
+        function showNotification(message, isSuccess = true) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${isSuccess ? '#0b5e7e' : '#dc2626'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                z-index: 10000;
+                animation: fadeIn 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            `;
+            notification.innerText = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validatePhone(phone) {
+            const digits = phone.replace(/\D/g, '');
+            return digits.length >= 10 && digits.length <= 12;
+        }
+
+        function hideError(elementId) {
+            const errorDiv = document.getElementById(elementId);
+            if (errorDiv) errorDiv.classList.remove('show');
+        }
+
+        function showError(elementId, message) {
+            const errorDiv = document.getElementById(elementId);
+            if (errorDiv) {
+                errorDiv.textContent = message;
+                errorDiv.classList.add('show');
+            }
+        }
+
+        async function fetchCurrentUser() {
+            try {
+                const response = await fetch(`${API_URL}/auth/me`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.user) {
+                        currentUser = data.user;
+                        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        loadUserData();
+                    } else {
+                        currentUser = null;
+                        localStorage.removeItem('currentUser');
+                        showNotification('Пожалуйста, войдите в аккаунт', false);
+                        setTimeout(() => window.location.href = 'auth.html', 1500);
+                    }
+                } else {
+                    currentUser = null;
+                    localStorage.removeItem('currentUser');
+                }
+            } catch (error) {
+                console.error('Ошибка получения пользователя:', error);
+                currentUser = null;
+            }
+            updateUserUI();
+        }
+
+        async function fetchFavoritesCount() {
+            if (!currentUser) return 0;
+            try {
+                const response = await fetch(`${API_URL}/favorites`, { method: 'GET', credentials: 'include' });
+                if (response.ok) {
+                    const data = await response.json();
+                    let favorites = [];
+                    if (Array.isArray(data) && data.length > 0) {
+                        if (data[0] && data[0].tour_data) {
+                            favorites = data.map(item => item.tour_data).filter(tour => tour !== null);
+                        } else {
+                            favorites = data;
+                        }
+                    }
+                    document.getElementById('favoritesCount').innerText = favorites.length;
+                }
+            } catch (error) {
+                const favorites = JSON.parse(localStorage.getItem('favorites_tours')) || [];
+                document.getElementById('favoritesCount').innerText = favorites.length;
+            }
+            return 0;
+        }
+
+        async function fetchCartCount() {
+            if (!currentUser) return 0;
+            try {
+                const response = await fetch(`${API_URL}/cart`, { method: 'GET', credentials: 'include' });
+                if (response.ok) {
+                    const cart = await response.json();
+                    document.getElementById('cartCount').innerText = cart.length;
+                }
+            } catch (error) {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                document.getElementById('cartCount').innerText = cart.length;
+            }
+            return 0;
+        }
+
+        async function updateProfile(name, email, phone, birthDate) {
+            try {
+                const response = await fetch(`${API_URL}/users/update`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ name, email, phone, birthDate })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    currentUser = data.user;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    updateUserUI();
+                    showNotification('Профиль успешно обновлен!');
+                    return true;
+                } else {
+                    const error = await response.json();
+                    showNotification(error.error || 'Ошибка обновления профиля', false);
+                    return false;
+                }
+            } catch (error) {
+                showNotification('Ошибка соединения с сервером', false);
+                return false;
+            }
+        }
+
+        async function changePasswordRequest(currentPassword, newPassword) {
+            try {
+                const response = await fetch(`${API_URL}/users/change-password`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ currentPassword, newPassword })
+                });
+                
+                if (response.ok) {
+                    showNotification('Пароль успешно изменен!');
+                    return true;
+                } else {
+                    const error = await response.json();
+                    showNotification(error.error || 'Ошибка смены пароля', false);
+                    return false;
+                }
+            } catch (error) {
+                showNotification('Ошибка соединения с сервером', false);
+                return false;
+            }
+        }
+
+        async function deleteAccountRequest() {
+            try {
+                const response = await fetch(`${API_URL}/users/delete`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    localStorage.removeItem('currentUser');
+                    localStorage.removeItem('cart');
+                    showNotification('Аккаунт удален');
+                    setTimeout(() => window.location.href = 'index.html', 1500);
+                    return true;
+                } else {
+                    const error = await response.json();
+                    showNotification(error.error || 'Ошибка удаления аккаунта', false);
+                    return false;
+                }
+            } catch (error) {
+                showNotification('Ошибка соединения с сервером', false);
+                return false;
+            }
+        }
+
+        async function logout() {
+            try {
+                await fetch(`${API_URL}/auth/logout`, { method: 'POST', credentials: 'include' });
+            } catch (error) {}
+            localStorage.removeItem('currentUser');
+            currentUser = null;
+            updateUserUI();
+            showNotification('Вы вышли из аккаунта');
+            setTimeout(() => window.location.href = 'index.html', 1000);
+        }
+
+        function updateUserUI() {
+            const accountName = document.getElementById('accountName');
+            const userNameDisplay = document.getElementById('userNameDisplay');
+            const userEmailDisplay = document.getElementById('userEmailDisplay');
+            const loginLink = document.getElementById('loginLink');
+            const registerLink = document.getElementById('registerLink');
+            const divider1 = document.getElementById('divider1');
+            const logoutLink = document.getElementById('logoutLink');
+            const adminLink = document.getElementById('adminLink');
+            const divider2 = document.getElementById('divider2');
+            
+            if (currentUser) {
+                const displayName = currentUser.name.split(' ')[0] || currentUser.name;
+                if (accountName) accountName.innerText = displayName;
+                if (userNameDisplay) userNameDisplay.innerText = currentUser.name;
+                if (userEmailDisplay) userEmailDisplay.innerText = currentUser.email;
+                if (loginLink) loginLink.style.display = 'none';
+                if (registerLink) registerLink.style.display = 'none';
+                if (divider1) divider1.style.display = 'none';
+                if (logoutLink) logoutLink.style.display = 'flex';
+                
+                if (currentUser.role === 'admin' && adminLink) {
+                    adminLink.style.display = 'flex';
+                    if (divider2) divider2.style.display = 'block';
+                } else if (adminLink) {
+                    adminLink.style.display = 'none';
+                    if (divider2) divider2.style.display = 'none';
+                }
+            } else {
+                if (accountName) accountName.innerText = 'Войти';
+                if (userNameDisplay) userNameDisplay.innerText = 'Гость';
+                if (userEmailDisplay) userEmailDisplay.innerText = 'Войдите в аккаунт';
+                if (loginLink) loginLink.style.display = 'flex';
+                if (registerLink) registerLink.style.display = 'flex';
+                if (divider1) divider1.style.display = 'block';
+                if (logoutLink) logoutLink.style.display = 'none';
+                if (adminLink) adminLink.style.display = 'none';
+                if (divider2) divider2.style.display = 'none';
+            }
+        }
+
+        function loadUserData() {
+            if (currentUser) {
+                document.getElementById('profileName').value = currentUser.name || '';
+                document.getElementById('profileEmail').value = currentUser.email || '';
+                document.getElementById('profilePhone').value = currentUser.phone || '';
+                document.getElementById('profileBirthDate').value = currentUser.birthDate || '';
+                
+                const savedAvatar = localStorage.getItem(`avatar_${currentUser.id}`);
+                if (savedAvatar) {
+                    document.getElementById('avatarPreview').innerHTML = `<img src="${savedAvatar}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">`;
+                } else {
+                    const initial = currentUser.name.charAt(0).toUpperCase();
+                    document.getElementById('avatarPreview').innerHTML = initial;
+                }
+                
+                const notifications = JSON.parse(localStorage.getItem(`notifications_${currentUser.id}`)) || { email: true };
+                const emailToggle = document.getElementById('emailNotifications');
+                if (emailToggle) {
+                    if (notifications.email) emailToggle.classList.add('active');
+                    else emailToggle.classList.remove('active');
+                }
+            }
+        }
+
+        function switchTab(tab) {
+            const tabs = ['profile', 'security', 'notifications', 'danger'];
+            tabs.forEach(t => {
+                const tabPane = document.getElementById(`${t}Tab`);
+                const tabBtn = document.querySelector(`.tab-btn[onclick="switchTab('${t}')"]`);
+                if (tabPane) tabPane.classList.remove('active');
+                if (tabBtn) tabBtn.classList.remove('active');
+            });
+            document.getElementById(`${tab}Tab`).classList.add('active');
+            const activeBtn = document.querySelector(`.tab-btn[onclick="switchTab('${tab}')"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+        }
+
+        function changeAvatar(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const avatarPreview = document.getElementById('avatarPreview');
+                    avatarPreview.innerHTML = `<img src="${e.target.result}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">`;
+                    if (currentUser) {
+                        localStorage.setItem(`avatar_${currentUser.id}`, e.target.result);
+                        showNotification('Аватар обновлен!');
+                    }
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function saveProfile() {
+            const name = document.getElementById('profileName').value.trim();
+            const email = document.getElementById('profileEmail').value.trim();
+            const phone = document.getElementById('profilePhone').value.trim();
+            const birthDate = document.getElementById('profileBirthDate').value;
+            
+            let isValid = true;
+            hideError('nameError');
+            hideError('emailError');
+            hideError('phoneError');
+            
+            if (!name || name.length < 3) {
+                showError('nameError', 'Укажите корректное имя (минимум 3 символа)');
+                isValid = false;
+            }
+            if (!email || !validateEmail(email)) {
+                showError('emailError', 'Укажите корректный email');
+                isValid = false;
+            }
+            if (!phone || !validatePhone(phone)) {
+                showError('phoneError', 'Укажите корректный телефон');
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            await updateProfile(name, email, phone, birthDate);
+        }
+
+        async function changePassword() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            let isValid = true;
+            hideError('currentPasswordError');
+            hideError('newPasswordError');
+            hideError('confirmPasswordError');
+            
+            if (!currentPassword) {
+                showError('currentPasswordError', 'Введите текущий пароль');
+                isValid = false;
+            }
+            if (!newPassword || newPassword.length < 6) {
+                showError('newPasswordError', 'Пароль должен быть не менее 6 символов');
+                isValid = false;
+            }
+            if (newPassword !== confirmPassword) {
+                showError('confirmPasswordError', 'Пароли не совпадают');
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            await changePasswordRequest(currentPassword, newPassword);
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        }
+
+        function toggleNotification(type) {
+            const toggle = document.getElementById(`${type}Notifications`);
+            if (toggle) toggle.classList.toggle('active');
+        }
+
+        function saveNotifications() {
+            if (!currentUser) return;
+            const emailActive = document.getElementById('emailNotifications').classList.contains('active');
+            const notifications = { email: emailActive };
+            localStorage.setItem(`notifications_${currentUser.id}`, JSON.stringify(notifications));
+            showNotification('Настройки уведомлений сохранены!');
+        }
+
+        async function deleteAccount() {
+            if (confirm('Вы уверены, что хотите удалить аккаунт? Это действие необратимо!')) {
+                const confirmText = prompt('Введите "УДАЛИТЬ" для подтверждения');
+                if (confirmText === 'УДАЛИТЬ') {
+                    await deleteAccountRequest();
+                } else {
+                    showNotification('Подтверждение не пройдено', false);
+                }
+            }
+        }
+
+        // Города
+        const cities = ["Москва", "Санкт-Петербург", "Екатеринбург", "Казань", "Новосибирск", "Сочи", "Краснодар", "Оренбург"];
+        let selectedCity = localStorage.getItem('selectedCity') || "Москва";
+
+        function renderCityList(filterText = '') {
+            const filteredCities = cities.filter(city => city.toLowerCase().includes(filterText.toLowerCase()));
+            const cityList = document.getElementById('cityList');
+            if (cityList) {
+                cityList.innerHTML = filteredCities.map(city => `
+                    <div class="city-item ${city === selectedCity ? 'selected' : ''}" data-city="${city}">
+                        <span>${city}</span>${city === selectedCity ? '<span style="margin-left: auto;">✓</span>' : ''}
+                    </div>
+                `).join('');
+                document.querySelectorAll('.city-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        selectedCity = item.dataset.city;
+                        localStorage.setItem('selectedCity', selectedCity);
+                        document.getElementById('selectedCityText').innerText = selectedCity;
+                        renderCityList('');
+                        const cityDropdown = document.getElementById('cityDropdown');
+                        if (cityDropdown) cityDropdown.classList.remove('show');
+                    });
+                });
+            }
+        }
+
+        function initCitySelector() {
+            document.getElementById('selectedCityText').innerText = selectedCity;
+            renderCityList('');
+            const cityButton = document.getElementById('cityButton');
+            const cityDropdown = document.getElementById('cityDropdown');
+            const citySearch = document.getElementById('citySearch');
+            
+            if (cityButton && cityDropdown) {
+                cityButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    cityDropdown.classList.toggle('show');
+                    if (cityDropdown.classList.contains('show') && citySearch) {
+                        renderCityList('');
+                        citySearch.focus();
+                    }
+                });
+            }
+            if (citySearch) {
+                citySearch.addEventListener('input', (e) => renderCityList(e.target.value));
+            }
+            document.addEventListener('click', (e) => {
+                const citySelector = document.getElementById('citySelector');
+                if (citySelector && !citySelector.contains(e.target) && cityDropdown) {
+                    cityDropdown.classList.remove('show');
+                }
+            });
+        }
+
+        function initAccountMenu() {
+            const accountButton = document.getElementById('accountButton');
+            const accountDropdown = document.getElementById('accountDropdown');
+            if (accountButton && accountDropdown) {
+                accountButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    accountDropdown.classList.toggle('show');
+                });
+                const logoutLink = document.getElementById('logoutLink');
+                if (logoutLink) {
+                    logoutLink.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        await logout();
+                    });
+                }
+                document.addEventListener('click', (e) => {
+                    const accountMenu = document.getElementById('accountMenu');
+                    if (accountMenu && !accountMenu.contains(e.target) && accountDropdown) {
+                        accountDropdown.classList.remove('show');
+                    }
+                });
+            }
+        }
+
+        async function init() {
+            initCitySelector();
+            initAccountMenu();
+            await fetchCurrentUser();
+            await fetchFavoritesCount();
+            await fetchCartCount();
+            if (!currentUser) {
+                showNotification('Пожалуйста, войдите в аккаунт', false);
+                setTimeout(() => window.location.href = 'auth.html', 1500);
+            }
+        }
+
+        window.switchTab = switchTab;
+        window.changeAvatar = changeAvatar;
+        window.saveProfile = saveProfile;
+        window.changePassword = changePassword;
+        window.toggleNotification = toggleNotification;
+        window.saveNotifications = saveNotifications;
+        window.deleteAccount = deleteAccount;
+
+        init();
+    </script>
+</body>
+
+</html>

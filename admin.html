@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЛЕТИМ | Админ-панель</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7fa;
+            color: #1a2c3e;
+        }
+
+        .top-header {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding-left: 120px;
+        }
+
+        .back-to-site {
+            background: #42C0E8;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .back-to-site:hover {
+            background: #2aa8d0;
+            transform: translateY(-2px);
+        }
+
+        .nav-header1 {
+            background: #42C0E8;
+            padding: 0.8rem 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #000000;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 0;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #696969;
+            border-bottom-color: #23697e;
+        }
+
+        .main-container3 {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 24px;
+            padding: 1.8rem;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px -8px rgba(0, 0, 0, 0.15);
+            border-color: #42C0E8;
+        }
+
+        .stat-card h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #42C0E8;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 28px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e2e8f0;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.3rem;
+            color: #0b3b5f;
+        }
+
+        .btn-add {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-add:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .btn-edit,
+        .btn-delete,
+        .btn-view {
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            border: none;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .btn-edit {
+            background: #42C0E8;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #2aa8d0;
+        }
+
+        .btn-delete {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #b91c1c;
+        }
+
+        .btn-view {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background: #7c3aed;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-confirmed {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .status-completed {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .status-cancelled {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 28px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 1.5rem;
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .modal-header h3 {
+            font-size: 1.2rem;
+            color: #0b3b5f;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: all 0.2s;
+        }
+
+        .close-modal:hover {
+            color: #dc2626;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: #4a627a;
+            margin-bottom: 0.3rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #42C0E8;
+            box-shadow: 0 0 0 3px rgba(66, 192, 232, 0.1);
+        }
+
+        .btn-save {
+            background: #42C0E8;
+            color: white;
+            border: none;
+            padding: 0.7rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-save:hover {
+            background: #2aa8d0;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 3rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+            justify-content: space-between;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3rem;
+        }
+
+        .footer-column h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: rgb(0, 0, 0);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: #42C0E8;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.6rem;
+            font-size: 0.85rem;
+        }
+
+        .footer-column ul li a {
+            color: #000000;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-column ul li a:hover {
+            color: #42C0E8;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #e2e8f0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            font-size: 0.8rem;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .top-header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            .logo {
+                padding-left: 0;
+                justify-content: center;
+            }
+
+            .nav-header1 {
+                padding: 0.8rem 1rem;
+            }
+
+            .nav-links {
+                justify-content: center;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container3 {
+                padding: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .table-wrapper {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 600px;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 1rem;
+            }
+
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-column h3::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="top-header">
+        <div class="logo" onclick="window.location.href='/'">
+            <div class="logo-text">
+                <img src="/image/logo.png" alt="ЛЕТИМ"
+                    onerror="this.src='https://via.placeholder.com/50x50?text=ЛЕТИМ'">
+            </div>
+        </div>
+        <div>
+            <a href="/" class="back-to-site">← На сайт</a>
+        </div>
+    </header>
+
+    <nav class="nav-header1">
+        <div class="nav-links">
+            <a href="#" data-tab="dashboard" class="active">📊 Главная</a>
+            <a href="#" data-tab="hotels">🏨 Отели</a>
+            <a href="#" data-tab="tours">✈️ Туры</a>
+            <a href="#" data-tab="orders">📦 Заказы</a>
+        </div>
+    </nav>
+
+    <main class="main-container3">
+        <div id="dashboardTab" class="content-section">
+            <div class="section-header">
+                <h2>📊 Статистика</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>🏨 Отели</h3>
+                    <div class="stat-number" id="statHotels">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>✈️ Туры</h3>
+                    <div class="stat-number" id="statTours">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>📦 Заказы</h3>
+                    <div class="stat-number" id="statOrders">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="hotelsTab" class="content-section" style="display: none;">
+            <div class="section-header">
+                <h2>🏨 Управление отелями</h2>
+                <button class="btn-add" onclick="openModal('hotel')">+ Добавить отель</button>
+            </div>
+            <div class="table-wrapper">
+                <table id="hotelsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Название</th>
+                            <th>Звезды</th>
+                            <th>Курорт</th>
+                            <th>Страна</th>
+                            <th>Цена</th>
+                            <th>Активен</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="toursTab" class="content-section" style="display: none;">
+            <div class="section-header">
+                <h2>✈️ Управление турами</h2>
+                <button class="btn-add" onclick="openModal('tour')">+ Добавить тур</button>
+            </div>
+            <div class="table-wrapper">
+                <table id="toursTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Название</th>
+                            <th>Страна</th>
+                            <th>Цена</th>
+                            <th>Длит.</th>
+                            <th>Фото</th>
+                            <th>Активен</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="ordersTab" class="content-section" style="display: none;">
+            <div class="section-header">
+                <h2>📦 Управление заказами</h2>
+            </div>
+            <div class="table-wrapper">
+                <table id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>№ заказа</th>
+                            <th>Дата</th>
+                            <th>Покупатель</th>
+                            <th>Email</th>
+                            <th>Сумма</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo"><img src="/image/logo.png" alt="ЛЕТИМ" style="height: 50px;"
+                    onerror="this.style.display='none'"></div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>О компании</h3>
+                    <ul>
+                        <li><a href="about.html">О нас</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Туристам</h3>
+                    <ul>
+                        <li><a href="index.html">Поиск туров</a></li>
+                        <li><a href="index1.html">Поиск отелей</a></li>
+                        <li><a href="tour.html">Горящие туры</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul>
+                        <li>8987-8987-00-2</li>
+                        <li>LETIM.OREN@MAIL.RU</li>
+                        <li>г. Оренбург, ул. Чкалова, д. 2</li>
+                        <li>Пн-Пт: 11:00-20:00</li>
+                        <li>Сб: 10:00-15:00</li>
+                        <li>Вс: выходной</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-social">
+                <a href="#"><img src="https://maxicons.ru/icons/Max_logo_black.svg" alt="MAX" width="24"></a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Добавить</h3><button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalBody"></div>
+            <button class="btn-save" onclick="saveItem()">💾 Сохранить</button>
+        </div>
+    </div>
+
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📋 Детали заказа</h3><button class="close-modal" onclick="closeOrderModal()">&times;</button>
+            </div>
+            <div id="orderDetails"></div>
+            <div class="form-group" style="margin-top: 1rem;"><label>Изменить статус</label>
+                <select id="orderStatusSelect"
+                    style="width: 100%; padding: 0.6rem; border-radius: 12px; border: 1px solid #e2e8f0;">
+                    <option value="pending">⏳ В обработке</option>
+                    <option value="confirmed">✅ Подтвержден</option>
+                    <option value="completed">🎉 Выполнен</option>
+                    <option value="cancelled">❌ Отменен</option>
+                </select>
+            </div>
+            <button class="btn-save" onclick="updateOrderStatus()">🔄 Обновить статус</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3003/api';
+        let currentUser = null;
+        let currentType = '';
+        let currentEditId = null;
+        let currentOrderId = null;
+
+        function showNotification(message, isError = false) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed; bottom: 20px; right: 20px;
+                background: ${isError ? '#dc2626' : '#22c55e'};
+                color: white; padding: 12px 20px; border-radius: 8px;
+                z-index: 10000; animation: fadeIn 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            `;
+            notification.innerText = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        function getStatusText(status) {
+            const map = { 'pending': 'В обработке', 'confirmed': 'Подтвержден', 'completed': 'Выполнен', 'cancelled': 'Отменен' };
+            return map[status] || status;
+        }
+
+        // ========== API ДЛЯ ОТЕЛЕЙ ==========
+        async function fetchHotelsFromServer() {
+            try {
+                const response = await fetch(`${API_URL}/hotels`, { method: 'GET', credentials: 'include' });
+                if (response.ok) return await response.json();
+            } catch (e) { console.error('Ошибка загрузки отелей:', e); }
+            return [];
+        }
+
+        async function saveHotelToServer(hotelData) {
+            try {
+                const method = hotelData.id && hotelData.id < 1000 ? 'PUT' : 'POST';
+                const url = hotelData.id && hotelData.id < 1000 ? `${API_URL}/hotels/${hotelData.id}` : `${API_URL}/hotels`;
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(hotelData)
+                });
+                return response.ok;
+            } catch (e) { console.error('Ошибка сохранения отеля:', e); return false; }
+        }
+
+        async function deleteHotelFromServer(hotelId) {
+            try {
+                const response = await fetch(`${API_URL}/hotels/${hotelId}`, { method: 'DELETE', credentials: 'include' });
+                return response.ok;
+            } catch (e) { console.error('Ошибка удаления отеля:', e); return false; }
+        }
+
+        // ========== API ДЛЯ ТУРОВ ==========
+        async function fetchToursFromServer() {
+            try {
+                const response = await fetch(`${API_URL}/tours`, { method: 'GET', credentials: 'include' });
+                if (response.ok) return await response.json();
+            } catch (e) { console.error('Ошибка загрузки туров:', e); }
+            return [];
+        }
+
+        async function saveTourToServer(tourData) {
+            try {
+                const method = tourData.id && tourData.id < 1000 ? 'PUT' : 'POST';
+                const url = tourData.id && tourData.id < 1000 ? `${API_URL}/tours/${tourData.id}` : `${API_URL}/tours`;
+                const response = await fetch(url, {
+                    method: method,
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(tourData)
+                });
+                return response.ok;
+            } catch (e) { console.error('Ошибка сохранения тура:', e); return false; }
+        }
+
+        async function deleteTourFromServer(tourId) {
+            try {
+                const response = await fetch(`${API_URL}/tours/${tourId}`, { method: 'DELETE', credentials: 'include' });
+                return response.ok;
+            } catch (e) { console.error('Ошибка удаления тура:', e); return false; }
+        }
+
+        // ========== LOCALSTORAGE (FALLBACK) ==========
+        function getHotels() { return JSON.parse(localStorage.getItem('hotels')) || []; }
+        function getTours() { return JSON.parse(localStorage.getItem('tours')) || []; }
+        function getOrders() { return JSON.parse(localStorage.getItem('orders')) || []; }
+        function saveHotels(hotels) { localStorage.setItem('hotels', JSON.stringify(hotels)); }
+        function saveTours(tours) { localStorage.setItem('tours', JSON.stringify(tours)); }
+        function saveOrders(orders) { localStorage.setItem('orders', JSON.stringify(orders)); }
+
+        // ========== АВТОРИЗАЦИЯ ==========
+        async function fetchCurrentUser() {
+            try {
+                const response = await fetch(`${API_URL}/auth/me`, { method: 'GET', credentials: 'include', headers: { 'Content-Type': 'application/json' } });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.user && data.user.role === 'admin') {
+                        currentUser = data.user;
+                        console.log('✅ Администратор авторизован:', currentUser.name);
+                    } else {
+                        showNotification('Доступ запрещен. Требуются права администратора.', true);
+                        setTimeout(() => window.location.href = '/', 1500);
+                    }
+                } else {
+                    showNotification('Пожалуйста, войдите как администратор', true);
+                    setTimeout(() => window.location.href = 'auth.html', 1500);
+                }
+            } catch (e) { console.error('Ошибка авторизации:', e); showNotification('Ошибка соединения с сервером', true); }
+        }
+
+        // ========== ЗАГРУЗКА ДАННЫХ ==========
+        async function loadStats() {
+            const hotels = await fetchHotelsFromServer();
+            const tours = await fetchToursFromServer();
+            const orders = getOrders();
+            document.getElementById('statHotels').innerText = hotels.length;
+            document.getElementById('statTours').innerText = tours.length;
+            document.getElementById('statOrders').innerText = orders.length;
+        }
+
+        async function loadHotels() {
+            const hotels = await fetchHotelsFromServer();
+            saveHotels(hotels);
+            const tbody = document.querySelector('#hotelsTable tbody');
+            tbody.innerHTML = hotels.map(h => `
+                <tr>
+                    <td>${h.id}</td><td>${escapeHtml(h.name)}</td>
+                    <td>${'★'.repeat(h.stars || 3)} ${h.stars || 3}★</td>
+                    <td>${escapeHtml(h.resort || '-')}</td>
+                    <td>${escapeHtml(h.country || '-')}</td>
+                    <td>${(h.price || 0).toLocaleString()} ₽</td>
+                    <td>${h.is_active !== false ? '✅' : '❌'}</td>
+                    <td><button class="btn-edit" onclick="editItem('hotel', ${h.id})">✏️</button>
+                        <button class="btn-delete" onclick="deleteItem('hotel', ${h.id})">🗑️</button></td>
+                </tr>
+            `).join('');
+        }
+
+        async function loadTours() {
+            const tours = await fetchToursFromServer();
+            saveTours(tours);
+            const tbody = document.querySelector('#toursTable tbody');
+            tbody.innerHTML = tours.map(t => `
+                <tr>
+                    <td>${t.id}</td><td>${escapeHtml(t.name)}</td>
+                    <td>${escapeHtml(t.country || '-')}</td>
+                    <td>${(t.price || 0).toLocaleString()} ₽</td>
+                    <td>${escapeHtml(t.duration || '-')}</td>
+                    <td>${t.image ? '<img src="' + t.image + '" style="width:50px;height:50px;object-fit:cover;border-radius:8px;">' : 'Нет фото'}</td>
+                    <td>${t.is_active !== false ? '✅' : '❌'}</td>
+                    <td><button class="btn-edit" onclick="editItem('tour', ${t.id})">✏️</button>
+                        <button class="btn-delete" onclick="deleteItem('tour', ${t.id})">🗑️</button></td>
+                </tr>
+            `).join('');
+        }
+
+        function loadOrders() {
+            const orders = getOrders();
+            const tbody = document.querySelector('#ordersTable tbody');
+            tbody.innerHTML = orders.map(o => `
+                <tr>
+                    <td><strong>${escapeHtml(o.orderNumber)}</strong></td>
+                    <td>${new Date(o.date).toLocaleString()}</td>
+                    <td>${escapeHtml(o.userName || '-')}</td>
+                    <td>${escapeHtml(o.userEmail || '-')}</td>
+                    <td><strong>${(o.totalAmount || 0).toLocaleString()} ₽</strong></td>
+                    <td><span class="status-badge status-${o.status || 'pending'}">${getStatusText(o.status)}</span></td>
+                    <td><button class="btn-view" onclick="viewOrder('${o.orderNumber}')">👁️</button>
+                        <button class="btn-delete" onclick="deleteOrder('${o.orderNumber}')">🗑️</button></td>
+                </tr>
+            `).join('');
+        }
+
+        function escapeHtml(str) { if (!str) return ''; return String(str).replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
+
+        // ========== CRUD ==========
+        function openModal(type, id = null) {
+            currentType = type;
+            currentEditId = id;
+            document.getElementById('modalTitle').innerText = id ? '✏️ Редактировать' : '➕ Добавить';
+            let html = '';
+            if (type === 'hotel') {
+                html = `
+                    <div class="form-group"><label>🏨 Название отеля</label><input type="text" id="name" placeholder="Grand Hotel"></div>
+                    <div class="form-group"><label>⭐ Звезды</label><select id="stars"><option value="5">5 ★★★★★</option><option value="4">4 ★★★★</option><option value="3" selected>3 ★★★</option><option value="2">2 ★★</option><option value="1">1 ★</option></select></div>
+                    <div class="form-group"><label>📍 Курорт</label><input type="text" id="resort" placeholder="Анталья"></div>
+                    <div class="form-group"><label>🌍 Страна</label><input type="text" id="country" placeholder="Турция"></div>
+                    <div class="form-group"><label>💰 Цена за ночь (₽)</label><input type="number" id="price" placeholder="5000"></div>
+                    <div class="form-group"><label>📝 Описание</label><textarea id="description" rows="3"></textarea></div>
+                    <div class="form-group"><label>🔘 Активен</label><select id="is_active"><option value="true">Да</option><option value="false">Нет</option></select></div>
+                `;
+                if (id) {
+                    const hotels = getHotels();
+                    const item = hotels.find(h => h.id === id);
+                    if (item) setTimeout(() => {
+                        document.getElementById('name').value = item.name || '';
+                        document.getElementById('stars').value = item.stars || 3;
+                        document.getElementById('resort').value = item.resort || '';
+                        document.getElementById('country').value = item.country || '';
+                        document.getElementById('price').value = item.price || '';
+                        document.getElementById('description').value = item.description || '';
+                        document.getElementById('is_active').value = item.is_active !== false ? 'true' : 'false';
+                    }, 100);
+                }
+            } else if (type === 'tour') {
+                html = `
+                    <div class="form-group"><label>✈️ Название тура</label><input type="text" id="name" placeholder="Райский Пхукет"></div>
+                    <div class="form-group"><label>🌍 Страна</label><input type="text" id="country" placeholder="Таиланд"></div>
+                    <div class="form-group"><label>💰 Цена (₽)</label><input type="number" id="price" placeholder="125000"></div>
+                    <div class="form-group"><label>⏱️ Длительность</label><input type="text" id="duration" placeholder="10 дней"></div>
+                    <div class="form-group"><label>🖼️ Ссылка на фото</label><input type="text" id="image" placeholder="https://example.com/photo.jpg"></div>
+                    <div class="form-group"><label>📝 Описание</label><textarea id="description" rows="3"></textarea></div>
+                    <div class="form-group"><label>🔘 Активен</label><select id="is_active"><option value="true">Да</option><option value="false">Нет</option></select></div>
+                `;
+                if (id) {
+                    const tours = getTours();
+                    const item = tours.find(t => t.id === id);
+                    if (item) setTimeout(() => {
+                        document.getElementById('name').value = item.name || '';
+                        document.getElementById('country').value = item.country || '';
+                        document.getElementById('price').value = item.price || '';
+                        document.getElementById('duration').value = item.duration || '';
+                        document.getElementById('image').value = item.image || '';
+                        document.getElementById('description').value = item.description || '';
+                        document.getElementById('is_active').value = item.is_active !== false ? 'true' : 'false';
+                    }, 100);
+                }
+            }
+            document.getElementById('modalBody').innerHTML = html;
+            document.getElementById('editModal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('editModal').style.display = 'none'; currentEditId = null; }
+
+        async function saveItem() {
+            if (currentType === 'hotel') {
+                const data = {
+                    id: currentEditId || Date.now(),
+                    name: document.getElementById('name').value,
+                    stars: parseInt(document.getElementById('stars').value),
+                    resort: document.getElementById('resort').value,
+                    country: document.getElementById('country').value,
+                    price: parseInt(document.getElementById('price').value),
+                    description: document.getElementById('description').value,
+                    is_active: document.getElementById('is_active').value === 'true'
+                };
+                const saved = await saveHotelToServer(data);
+                if (saved) {
+                    await loadHotels();
+                    showNotification('✅ Отель сохранен на сервере');
+                } else showNotification('⚠️ Ошибка сохранения отеля', true);
+            } else if (currentType === 'tour') {
+                const data = {
+                    id: currentEditId || Date.now(),
+                    name: document.getElementById('name').value,
+                    country: document.getElementById('country').value,
+                    price: parseInt(document.getElementById('price').value),
+                    duration: document.getElementById('duration').value,
+                    description: document.getElementById('description').value,
+                    image: document.getElementById('image').value || '',
+                    is_active: document.getElementById('is_active').value === 'true'
+                };
+                const saved = await saveTourToServer(data);
+                if (saved) {
+                    await loadTours();
+                    showNotification('✅ Тур сохранен на сервере');
+                } else showNotification('⚠️ Ошибка сохранения тура', true);
+            }
+            closeModal();
+            await loadStats();
+        }
+
+        async function deleteItem(type, id) {
+            if (confirm('🗑️ Удалить этот элемент?')) {
+                if (type === 'hotel') {
+                    await deleteHotelFromServer(id);
+                    await loadHotels();
+                    showNotification('✅ Отель удален');
+                } else if (type === 'tour') {
+                    await deleteTourFromServer(id);
+                    await loadTours();
+                    showNotification('✅ Тур удален');
+                }
+                await loadStats();
+            }
+        }
+
+        function editItem(type, id) { openModal(type, id); }
+
+        // ========== ЗАКАЗЫ ==========
+        function viewOrder(orderNumber) {
+            const orders = getOrders();
+            const order = orders.find(o => o.orderNumber === orderNumber);
+            if (!order) return;
+            currentOrderId = orderNumber;
+            const itemsHtml = (order.items || []).map(item => `<div class="order-item-row"><span><strong>${escapeHtml(item.name)}</strong> (${item.type === 'tour' ? '✈️ Тур' : '🏨 Отель'})</span><span>${(item.price || 0).toLocaleString()} ₽</span></div>`).join('');
+            document.getElementById('orderDetails').innerHTML = `
+                <div class="order-items-list"><h4>📦 Товары в заказе:</h4>${itemsHtml || '<div>Нет товаров</div>'}<div class="order-item-row" style="border-top:2px solid #e2e8f0;margin-top:0.5rem;padding-top:0.8rem;"><strong>💰 Итого:</strong><strong>${(order.totalAmount || 0).toLocaleString()} ₽</strong></div>${order.baggageAdded ? '<div class="order-item-row"><span>🧳 Багаж:</span><span>+2000 ₽</span></div>' : ''}</div>
+                <div style="margin-top:1rem;"><p><strong>👤 Покупатель:</strong> ${escapeHtml(order.userName || '-')}</p><p><strong>📧 Email:</strong> ${escapeHtml(order.userEmail || '-')}</p><p><strong>📅 Дата заказа:</strong> ${new Date(order.date).toLocaleString()}</p><p><strong>💳 Способ оплаты:</strong> ${order.paymentMethod === 'card' ? 'Банковская карта' : order.paymentMethod === 'cash' ? 'Наличными' : 'СБП'}</p></div>
+            `;
+            document.getElementById('orderStatusSelect').value = order.status || 'pending';
+            document.getElementById('orderModal').style.display = 'flex';
+        }
+
+        function closeOrderModal() { document.getElementById('orderModal').style.display = 'none'; currentOrderId = null; }
+
+        function updateOrderStatus() {
+            if (!currentOrderId) return;
+            const orders = getOrders();
+            const newStatus = document.getElementById('orderStatusSelect').value;
+            const index = orders.findIndex(o => o.orderNumber === currentOrderId);
+            if (index !== -1) {
+                orders[index].status = newStatus;
+                saveOrders(orders);
+                loadOrders();
+                showNotification(`✅ Статус заказа №${currentOrderId} изменен на "${getStatusText(newStatus)}"`);
+                closeOrderModal();
+            }
+        }
+
+        function deleteOrder(orderNumber) {
+            if (confirm('🗑️ Удалить этот заказ?')) {
+                let orders = getOrders();
+                orders = orders.filter(o => o.orderNumber !== orderNumber);
+                saveOrders(orders);
+                loadOrders();
+                loadStats();
+                showNotification('✅ Заказ удален');
+            }
+        }
+
+        // ========== ИНИЦИАЛИЗАЦИЯ ==========
+        async function initTestData() {
+            let hotels = await fetchHotelsFromServer();
+            if (hotels.length === 0) {
+                const defaultHotels = [
+                    { id: 1, name: "Sunny Beach Resort", stars: 5, resort: "Анталья", country: "Турция", price: 15000, description: "Роскошный отель с собственным пляжем", is_active: true },
+                    { id: 2, name: "Royal Blue Hotel", stars: 4, resort: "Шарм-эль-Шейх", country: "Египет", price: 12000, description: "Отель с видом на море", is_active: true },
+                    { id: 3, name: "Grand Palace", stars: 5, resort: "Пхукет", country: "Таиланд", price: 25000, description: "VIP обслуживание", is_active: true }
+                ];
+                for (const hotel of defaultHotels) await saveHotelToServer(hotel);
+            }
+            let tours = await fetchToursFromServer();
+            if (tours.length === 0) {
+                const defaultTours = [
+                    { id: 1, name: "Райский Пхукет", country: "Таиланд", price: 125000, duration: "10 дней", description: "Экскурсии, море, ночная жизнь", image: "https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?w=400", is_active: true },
+                    { id: 2, name: "Турецкий рай", country: "Турция", price: 85000, duration: "7 дней", description: "Отель 5*, all inclusive", image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400", is_active: true },
+                    { id: 3, name: "Итальянское лето", country: "Италия", price: 210000, duration: "9 дней", description: "Рим, Флоренция, Венеция", image: "https://images.unsplash.com/photo-1533681904393-9ab6eee7f63a?w=400", is_active: true }
+                ];
+                for (const tour of defaultTours) await saveTourToServer(tour);
+            }
+            if (!localStorage.getItem('orders')) {
+                localStorage.setItem('orders', JSON.stringify([{
+                    orderNumber: 'ORD-' + Math.floor(100000 + Math.random() * 900000),
+                    date: new Date().toISOString(),
+                    userName: 'Иван Петров',
+                    userEmail: 'ivan@test.com',
+                    status: 'pending',
+                    items: [{ name: 'Турецкий рай', price: 85000, type: 'tour' }],
+                    totalAmount: 85000,
+                    baggageAdded: false,
+                    paymentMethod: 'card'
+                }]));
+            }
+        }
+
+        function initNavigation() {
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const tab = link.dataset.tab;
+                    document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+                    link.classList.add('active');
+                    document.querySelectorAll('.content-section').forEach(section => section.style.display = 'none');
+                    if (tab === 'dashboard') document.getElementById('dashboardTab').style.display = 'block';
+                    else if (tab === 'hotels') document.getElementById('hotelsTab').style.display = 'block';
+                    else if (tab === 'tours') document.getElementById('toursTab').style.display = 'block';
+                    else if (tab === 'orders') document.getElementById('ordersTab').style.display = 'block';
+                });
+            });
+        }
+
+        async function init() {
+            console.log('🚀 Инициализация админ-панели...');
+            await initTestData();
+            initNavigation();
+            await fetchCurrentUser();
+            await loadStats();
+            await loadHotels();
+            await loadTours();
+            loadOrders();
+        }
+
+        window.openModal = openModal;
+        window.closeModal = closeModal;
+        window.saveItem = saveItem;
+        window.deleteItem = deleteItem;
+        window.editItem = editItem;
+        window.viewOrder = viewOrder;
+        window.closeOrderModal = closeOrderModal;
+        window.updateOrderStatus = updateOrderStatus;
+        window.deleteOrder = deleteOrder;
+
+        init();
+    </script>
+</body>
+
+</html>
